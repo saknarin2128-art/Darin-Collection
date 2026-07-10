@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCSG SYSTEM - Store Portal & Large Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Anuphan', sans-serif;
+            background: radial-gradient(circle at center, #fdfbfa 0%, #f3ede6 100%);
+            min-height: 100vh; margin: 0; padding: 20px;
+            display: flex; justify-content: center; align-items: center;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .auth-card {
+            background: #ffffff; width: 100%; max-width: 450px; padding: 45px 35px;
+            border-radius: 32px; box-shadow: 0 25px 60px rgba(74, 59, 50, 0.06);
+            border: 1px solid rgba(235, 220, 208, 0.7); text-align: center;
+            position: relative;
+        }
+        .auth-title { font-size: 28px; font-weight: 700; color: #4a3b32; margin: 0; letter-spacing: 0.12em; }
+        .auth-subtitle { font-size: 12px; color: #a39284; margin: 0 0 25px 0; }
+        
+        .tab-menu { display: flex; border-bottom: 2px solid #f5ede6; margin-bottom: 25px; }
+        .tab-btn { flex: 1; padding: 12px; font-weight: 600; font-size: 14px; color: #a39284; cursor: pointer; border: none; background: none; transition: all 0.2s; }
+        .tab-btn.active { color: #b38e6d; border-bottom: 2px solid #b38e6d; margin-bottom: -2px; }
+
+        .form-group { text-align: left; margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 12.5px; font-weight: 600; color: #4a3b32; margin-bottom: 6px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px 14px; border: 1px solid #ebdcd0; border-radius: 10px;
+            font-size: 14px; font-family: 'Anuphan', sans-serif; outline: none; background: #faf8f5;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: #b38e6d; background: #ffffff; }
+        
+        .btn-auth { width: 100%; background: #b38e6d; color:#fff; border:none; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .btn-auth:hover { background: #9c7553; }
+        
+        .main-dashboard { display: none; width: 100%; max-width: 1400px; background: #ffffff; padding: 35px; border-radius: 24px; box-shadow: 0 12px 40px rgba(74, 59, 50, 0.04); position: relative; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5ede6; padding-bottom: 15px; margin-bottom: 25px; }
+        .dash-header h1 { color: #b38e6d; font-size: 26px; margin: 0; font-weight: 700; }
+        .user-badge-zone { display: flex; align-items: center; gap: 12px; }
+        .user-tag { background: #faf6f2; border: 1px solid #ebdcd0; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; }
+        .btn-logout { background: #c94c4c; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer; font-weight:600; transition: background 0.2s; }
+        .btn-logout:hover { background: #b03a3a; }
+        
+        .tabs-nav { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #faf6f2; padding-bottom: 10px; }
+        .tab-nav-btn { background: none; border: none; padding: 10px 20px; font-size: 15px; font-weight: 600; color: #a39284; cursor: pointer; border-radius: 8px; }
+        .tab-nav-btn.active { background: #faf6f2; color: #b38e6d; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .workspace-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 35px; align-items: start; }
+        .right-panel { background-color: #faf8f5; padding: 25px; border-radius: 20px; border: 1px solid #ebdcd0; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .full-width { grid-column: span 2; }
+        .preset-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .btn-preset { background-color: #faf6f2; border: 1px solid #ebdcd0; color: #615043; padding: 5px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+        .btn-add-item { background-color: #b38e6d; color: #ffffff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+        .btn-add-item:hover { background: #9c7553; }
+        
+        .table-container { border: 1px solid #ebdcd0; border-radius: 14px; overflow: hidden; background: #ffffff; max-height: 250px; overflow-y: auto; }
+        .item-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+        .item-table th { background-color: #faf6f2; color: #615043; padding: 12px; font-weight: 600; position: sticky; top: 0; text-align: left; }
+        .item-table td { padding: 12px; border-bottom: 1px solid #f5ede6; text-align: left; vertical-align: middle; }
+        .btn-delete-row { background: #fbebebe8; color: #c94c4c; border: 1px solid #f5c2c2; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; }
+        .btn-delete-row:hover { background: #c94c4c; color: #fff; }
+        
+        .result-box { background-color: #4a3b32; color: #ffffff; padding: 20px; border-radius: 14px; text-align: center; margin-top: 15px; font-size: 14px; }
+        .result-box span { font-size: 34px; font-weight: 700; display: block; margin-top: 5px; }
+        
+        .action-container { display: grid; grid-template-columns: 1fr 2fr; gap: 12px; margin-top: 15px; }
+        .btn-action { padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-align: center; }
+        .btn-copy { background-color: #ebdcd0; color: #615043; }
+        .btn-send-sheet { background-color: #3d6a45; color: #ffffff; }
+        .btn-send-sheet:hover { background-color: #2f5235; }
+        .cheat-sheet-box { background-color: #fdfcfb; border: 1px dashed #ebdcd0; border-radius: 12px; padding: 14px; margin-top: 15px; font-size: 12.5px; line-height: 1.5; }
+        
+        .report-section { background: #ffffff; border: 1px solid #ebdcd0; border-radius: 16px; padding: 25px; }
+        .filter-row { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .filter-group label { font-size: 12.5px; font-weight: 600; color: #4a3b32; }
+        .filter-group select, .filter-group input { padding: 8px 12px; border-radius: 8px; border: 1px solid #ebdcd0; font-family: 'Anuphan'; outline: none; }
+        
+        .dashboard-table-wrapper { border: 1px solid #ebdcd0; border-radius: 12px; overflow-x: auto; background: #fff; }
+        .dash-large-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1150px; }
+        .dash-large-table th { background: #faf8f5; color: #4a3b32; padding: 12px 10px; font-weight: 600; border-bottom: 2px solid #ebdcd0; text-align: center; }
+        .dash-large-table td { padding: 12px 10px; border-bottom: 1px solid #f5ede6; text-align: center; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; display: inline-block; }
+        .badge-lock { background: #e3f2fd; color: #0d47a1; }
+        .badge-wait { background: #fff3e0; color: #e65100; }
+        .profit-positive { color: #2e7d32; font-weight: 600; background: #e8f5e9; padding: 2px 6px; border-radius: 4px; }
+        .profit-negative { color: #c62828; font-weight: 600; background: #ffebee; padding: 2px 6px; border-radius: 4px; }
+        
+        .loading-overlay { display: none; position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.92); border-radius:32px; justify-content:center; align-items:center; font-weight:600; color:#b38e6d; z-index:100; flex-direction:column; }
+        .hidden { display: none !important; }
+        .success-view { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card" id="authPortal">
+        <div class="loading-overlay" id="authLoading">⏳ กำลังยืนยันตัวตนผ่านระบบคลาวด์...</div>
+        
+        <div id="authForms">
+            <h1 class="auth-title">DCSG SYSTEM</h1>
+            <p class="auth-subtitle">Darin Calculate Silver & Gold System</p>
+            
+            <div class="tab-menu">
+                <button class="tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">ลงชื่อเข้าใช้งาน</button>
+                <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')">ลงทะเบียนร้านค้าใหม่</button>
+            </div>
+
+            <form id="loginForm" onsubmit="event.preventDefault(); triggerLiveStoreLogin();">
+                <div class="form-group">
+                    <label>Username (ชื่อผู้ใช้ประจำสาขา)</label>
+                    <input type="text" id="loginUser" placeholder="ระบุ Username" required>
+                </div>
+                <div class="form-group">
+                    <label>รหัสผ่าน (Password)</label>
+                    <input type="password" id="loginPass" placeholder="ระบุรหัสผ่าน" required>
+                </div>
+                <button type="submit" class="btn-auth">🔐 ตรวจสอบสิทธิ์เครื่องและล็อกอิน</button>
+            </form>
+
+            <form id="registerForm" style="display: none;" onsubmit="event.preventDefault(); triggerLiveStoreSignup();">
+                <div class="form-group">
+                    <label>1. ชื่อแบรนด์ร้านค้าหลัก (ภาษาอังกฤษตัวพิมพ์เล็ก)</label>
+                    <input type="text" id="regShop" placeholder="เช่น banpong1" required>
+                </div>
+                <div class="form-group">
+                    <label>2. ชื่อร้านและสาขาที่จะแสดงผลหน้าเว็บ</label>
+                    <input type="text" id="regDisplay" placeholder="เช่น บ้านโป่ง1" required>
+                </div>
+                <div class="form-group">
+                    <label>3. ตั้งชื่อ Username ประจำเครื่องนี้</label>
+                    <input type="text" id="regUser" placeholder="เช่น banpong1_owner" required>
+                </div>
+                <div class="form-group">
+                    <label>4. ตั้งรหัสผ่าน (Password)</label>
+                    <input type="password" id="regPass" placeholder="กำหนดรหัสผ่านประจำไอดี" required>
+                </div>
+                <div class="form-group">
+                    <label>5. บทบาทโครงสร้างการใช้งาน</label>
+                    <select id="regRole">
+                        <option value="Owner">Owner (เจ้าของร้าน/ผู้คุมเครือข่าย)</option>
+                        <option value="Staff">Staff (พนักงานประจำสาขาหน้าร้าน)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-auth" style="background-color:#3d6a45;">📝 ส่งใบสมัครเข้าคิวอนุมัติจากบอส</button>
+            </form>
+        </div>
+
+        <div class="success-view" id="successView">
+            <div style="font-size: 54px; margin-bottom: 15px;">✨</div>
+            <h3 style="margin: 0 0 10px 0; color:#3d6a45;">ส่งใบสมัครขึ้นระบบจริงเรียบร้อย!</h3>
+            <p style="font-size:13.5px; color:#8c7b70; line-height:1.6; margin-bottom:20px;">
+                ข้อมูลขยายเครือข่ายสาขาของท่านถูกบันทึกลงสเปรดชีตแล้ว<br>
+                กรุณาแจ้ง <b>"บอสใหญ่"</b> ให้เปิดหน้าแอดมินเพื่ออนุมัติสิทธิ์ล็อกอินครับ
+            </p>
+            <button class="btn-auth" style="background:#4a3b32;" onclick="backToLoginView()">ย้อนกลับหน้าเข้าสู่ระบบ</button>
+        </div>
+    </div>
+
+    <div class="main-dashboard" id="mainDashboard">
+        <div class="dash-header">
+            <div>
+                <h1 id="displayShopTitle">กำลังดึงตราแบรนด์ร้านค้า...</h1>
+                <div style="font-size: 13px; color: #a39284; margin-top: 4px;">ระบบเทคโนโลยีคำนวณราคามวลรวมและวิเคราะห์สถิติจริงหลังบ้าน</div>
+            </div>
+            <div class="user-badge-zone">
+                <div class="user-tag" style="display:flex; align-items:center; gap:6px; padding:4px 10px 4px 14px;">
+                    📍
+                    <select id="calcBranchSelector" onchange="onBranchSelectorChange()" style="border:none; background:transparent; font-family:'Anuphan'; font-weight:600; font-size:13px; color:#615043; outline:none; cursor:pointer;"></select>
+                </div>
+                <div class="user-tag" id="displayRoleTag" style="background:#4a3b32; color:#fff;">👤 สิทธิ์: Staff</div>
+                <button class="btn-logout" onclick="triggerStoreLogout()">🚪 ออกจากระบบ</button>
+            </div>
+        </div>
+
+        <div class="tabs-nav">
+            <button class="tab-nav-btn active" onclick="switchDashboardTab('calcTab', this)">🪙 เครื่องคำนวณราคา (เรทถอยสดจากบอส)</button>
+            <button class="tab-nav-btn" onclick="switchDashboardTab('reportTab', this)">📈 แดชบอร์ดสรุปยอดขายแยกประเภท</button>
+            <button class="tab-nav-btn" onclick="switchDashboardTab('classicCalcTab', this)">🧮 เครื่องคำนวณคลาสสิก (ทอง/เงินแยกก้อน)</button>
+        </div>
+
+        <div id="calcTab" class="tab-content active">
+            <div class="workspace-grid">
+                <div>
+                    <form id="goldForm" onsubmit="event.preventDefault();">
+                        <div class="form-grid">
+                            <div class="form-group" style="grid-column: span 2;"><label id="basePriceLabel">ราคาทองอ้างอิงสำหรับคำนวณ (สามารถคีย์ตั้งค่าได้เองอิสระ)</label><input type="number" id="basePrice" value="44500" oninput="calculatePriceLogic()"></div>
+                            <div class="form-group"><label>ประเภทสินค้าหลัก</label><select id="goldType" onchange="onCategoryTypeChange('gold')"><option value="ทองคำแท่ง">ทองคำแท่ง</option><option value="ทองรูปพรรณ">ทองรูปพรรณ</option><option value="ทองหลอม">ทองหลอม</option><option value="ไม่ใช่ทองคำ">-- คำนวณแร่เงิน --</option></select></div>
+                            <div class="form-group"><label>ประเภทแร่เงิน</label><select id="silverType" onchange="onCategoryTypeChange('silver')"><option value="ไม่ใช่แร่เงิน">-- คำนวณทองคำ --</option><option value="เงินแท่ง">เงินแท่ง (บาท)</option><option value="เงินหลอม">เงินหลอม</option></select></div>
+                            <div class="form-group"><label>น้ำหนักชิ้นงาน (กรัม)</label><input type="number" step="any" id="weightGrams" value="15.24" oninput="calculatePriceLogic()"><div class="preset-container"><button type="button" class="btn-preset" onclick="setWeightShortcut(1.905)">ครึ่งสลึง</button><button type="button" class="btn-preset" onclick="setWeightShortcut(3.811)">1 สลึง</button><button type="button" class="btn-preset" onclick="setWeightShortcut(15.24)">1 บาท</button></div></div>
+                            <div class="form-group full-width" id="meltedPurityGroup"><label id="purityLabel">เปอร์เซ็นต์ความบริสุทธิ์ (%)</label><input type="number" step="any" id="meltedPurity" value="96.5" oninput="calculatePriceLogic()"></div>
+
+                            <div class="form-group full-width"><label>ราคาคำนวณสุทธิต่อกรัมชิ้นนี้</label><input type="text" id="pricePerGram" readonly value="0.00 บาท"></div>
+                            <button type="button" class="btn-add-item full-width" onclick="pushItemToBill()">➕ บันทึกเข้าตั๋วบิลฝั่งขวา ➡️</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="right-panel">
+                    <label style="font-weight:600; font-size:14px; margin-bottom:12px; display:block; color:#b38e6d;">📋 ตั๋วรายการรับซื้อสะสมในบิลนี้</label>
+                    <div class="table-container"><table class="item-table"><thead><tr><th>รายการ</th><th>น้ำหนัก (ก.)</th><th>ทุนรวม</th><th>การกระทำ</th></tr></thead><tbody id="itemTableBody"><tr><td colspan="4" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr></tbody></table></div>
+                    <div class="result-box">ราคารับซื้อสุทธิรวมทั้งสิ้น<span id="totalResult">0.00 บาท</span></div>
+                    <div class="action-container">
+                        <button class="btn-action btn-copy" onclick="alert('คัดลอกยอดบิลรวมเรียบร้อยแล้ว')">📋 คัดลอก</button>
+                        <button class="btn-action btn-send-sheet" onclick="commitBillToCloudAndDashboard()">☁️ บันทึกเข้าชีทและแดชบอร์ด</button>
+                    </div>
+                    <div class="cheat-sheet-box" id="cheatSheetContent">กำลังตรวจสอบเรทถอยสดจากระบบแอดมิน...</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="reportTab" class="tab-content">
+            <div class="report-section">
+                <div class="filter-row">
+                    <h3 style="margin:0; color:#4a3b32; font-size:16px;">📊 ตารางแจกแจงบัญชีและการจัดการความเสี่ยงทองคำ</h3>
+                    
+                    <div class="filter-group">
+                        <label style="color:#b38e6d; font-weight:700;">👑 ราคาทองอ้างอิงสมาคม:</label>
+                        <input type="number" id="dashboardAssociationPrice" value="44500" style="width:110px; font-weight:700;" oninput="rebuildLargeDashboardTableHTML()">
+
+                        <label style="color:#615043; font-weight:700;">🥈 ราคาเงินอ้างอิง (ต่อกรัม):</label>
+                        <input type="number" id="dashboardSilverPriceInput" value="70" style="width:90px; font-weight:700;" oninput="rebuildLargeDashboardTableHTML()">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>🏠 สาขา:</label>
+                        <select id="dashboardBranchFilter" onchange="rebuildLargeDashboardTableHTML()">
+                            <option value="all">ทุกสาขา</option>
+                        </select>
+
+                        <label>📅 ช่วงเวลา:</label>
+                        <select id="dashboardDateFilter" onchange="rebuildLargeDashboardTableHTML()">
+                            <option value="all">แสดงข้อมูลทั้งหมด</option>
+                            <option value="today">เฉพาะวันนี้</option>
+                            <option value="month">เฉพาะเดือนนี้</option>
+                            <option value="year">เฉพาะปีนี้</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="dashboard-table-wrapper">
+                    <table class="dash-large-table">
+                        <thead>
+                            <tr>
+                                <th>วันที่</th>
+                                <th>สาขา</th>
+                                <th>รายการที่</th>
+                                <th>ชื่อรายการ</th>
+                                <th>น้ำหนัก (ก.)</th>
+                                <th>เปอร์เซ็นต์</th>
+                                <th>ทุน (บาท)</th>
+                                <th>ขั้นตอน</th>
+                                <th>ราคาทุน/บาททอง</th>
+                                <th>กำไร / ขาดทุน</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="classicCalcTab" class="tab-content">
+            <style>
+  .classic-scope { font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .classic-scope, .classic-scope *, .classic-scope *:before, .classic-scope *:after { box-sizing: border-box; }
+  .classic-scope .main-wrapper { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1550px; }
+  .classic-scope .left-container { flex: 1; min-width: 320px; max-width: 450px; display: flex; flex-direction: column; gap: 20px; }
+  .classic-scope .calculator-container { background-color: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); width: 100%; }
+  .classic-scope .cc-table-container { background-color: #ffffff; flex: 2; min-width: 320px; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; }
+  .classic-scope .tab-control-bar { display: flex; gap: 10px; border-bottom: 2px solid #ebdcd0; padding-bottom: 10px; margin-bottom: 15px; }
+  .classic-scope .cc-tab-btn { padding: 10px 20px; border: none; background-color: #f5f5f5; color: #666666; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .classic-scope .cc-tab-btn.active-tab { background-color: #a88463; color: #ffffff; box-shadow: 0 2px 6px rgba(168, 132, 99, 0.2); }
+  .classic-scope .table-scroll-wrapper { max-height: 520px; overflow-y: auto; overflow-x: auto; margin-top: 15px; border: 1px solid #ebdcd0; border-radius: 8px; -webkit-overflow-scrolling: touch; }
+  .classic-scope .gold-table { width: 100%; min-width: 850px; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+  .classic-scope .gold-table th { background-color: #fbf6f0; color: #a88463; font-weight: bold; text-align: center; padding: 12px; border-bottom: 2px solid #ebdcd0; position: sticky; top: 0; z-index: 10; }
+  .classic-scope .gold-table td { padding: 12px; border-bottom: 1px solid #f1f1f1; color: #444444; text-align: center; }
+  .classic-scope .calc-mode-container { display: flex; gap: 8px; margin-bottom: 20px; background-color: #f5f5f5; padding: 6px; border-radius: 12px; }
+  .classic-scope .mode-btn { flex: 1; padding: 12px 5px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.2s; text-align: center; background-color: transparent; color: #666666; }
+  .classic-scope .mode-btn.active-gold { background-color: #a88463; color: #fff; box-shadow: 0 2px 8px rgba(168, 132, 99, 0.3); }
+  .classic-scope .mode-btn.active-silver { background-color: #718096; color: #fff; box-shadow: 0 2px 8px rgba(113, 128, 150, 0.3); }
+  .classic-scope .cc-row { display: flex; gap: 12px; margin-bottom: 12px; width: 100%; }
+  .classic-scope .cc-form-group { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .classic-scope label { color: #555555; font-size: 13px; margin-bottom: 6px; font-weight: 500; }
+  .classic-scope input { padding: 12px; border: 1px solid #ebdcd0; border-radius: 10px; font-size: 16px; outline: none; width: 100%; }
+  .classic-scope .delete-row-btn { background-color: #ffe6e6; color: #cc0000; border: 1px solid #ffa3a3; border-radius: 6px; padding: 4px 10px; font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 10px; transition: all 0.2s; }
+  .classic-scope .delete-row-btn:hover { background-color: #cc0000; color: #ffffff; }
+  .classic-scope .item-name-cell { display: flex; align-items: center; justify-content: flex-start; padding-left: 15px !important; }
+  .classic-scope .pay-column { font-weight: bold; color: #b59275 !important; }
+  .classic-scope .summary-row td { position: sticky; bottom: 0; z-index: 9; background-color: #fbf6f0 !important; color: #a88463; font-weight: bold; border-top: 2px solid #ebdcd0; border-bottom: none; font-size: 15px; }
+  .classic-scope .empty-row-text { color: #bbb; font-style: italic; }
+  .classic-scope .silver-net-pay-container { margin-top: 20px; align-self: flex-end; background-color: #f0f4f8; border: 1px solid #cbd5e0; padding: 15px 25px; border-radius: 12px; text-align: right; width: 100%; max-width: 380px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+  .classic-scope .silver-net-title { font-size: 13px; color: #4a5568; font-weight: bold; margin-bottom: 4px; }
+  .classic-scope .silver-net-value { font-size: 26px; font-weight: bold; color: #2b6cb0; }
+  .classic-scope .save-to-history-btn { background-color: #27ae60; color: #ffffff; border: none; padding: 10px 18px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .classic-scope .save-to-history-btn:hover { background-color: #219653; }
+  .classic-scope .history-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+  .classic-scope .history-item { background-color: #fdfdfd; border: 1px solid #ebdcd0; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .classic-scope .history-item-header { display: flex; justify-content: space-between; font-size: 13px; color: #7f8c8d; border-bottom: 1px dashed #ebdcd0; padding-bottom: 6px; }
+  .classic-scope .history-item-body { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .classic-scope .history-summary-text { font-size: 14px; color: #444444; }
+  .classic-scope .history-actions { display: flex; gap: 8px; }
+  .classic-scope .hist-btn { padding: 6px 12px; font-size: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; border: 1px solid #ddd; transition: all 0.1s; }
+  .classic-scope .btn-view-detail { background-color: #f39c12; color: #fff; border-color: #e67e22; }
+  .classic-scope .btn-recall { background-color: #3498db; color: #fff; border-color: #2980b9; }
+  .classic-scope .btn-delete-hist { background-color: #fff; color: #c0392b; border-color: #e74c3c; }
+  .classic-scope .btn-delete-hist:hover { background-color: #c0392b; color: #fff; }
+  .classic-scope .history-grand-total { margin-top: 20px; background-color: #fbf6f0; border: 1px solid #ebdcd0; padding: 15px; border-radius: 10px; font-size: 14px; color: #a88463; font-weight: bold; display: flex; justify-content: space-between; }
+  .classic-scope .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+  .classic-scope .modal-box { background-color: #ffffff; width: 90%; max-width: 700px; border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; max-height: 85vh; }
+  .classic-scope .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ebdcd0; padding-bottom: 10px; margin-bottom: 15px; }
+  .classic-scope .modal-title { font-size: 18px; font-weight: bold; color: #a88463; }
+  .classic-scope .modal-close-x { background: none; border: none; font-size: 20px; color: #999; cursor: pointer; }
+  .classic-scope .modal-body { overflow-y: auto; margin-bottom: 15px; }
+  .classic-scope .modal-footer { display: flex; justify-content: flex-end; }
+  .classic-scope .btn-close-modal { background-color: #95a5a6; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+  @media (max-width: 1024px) { .classic-scope .main-wrapper { flex-direction: column; } .classic-scope .left-container { max-width: 100%; } .classic-scope .silver-net-pay-container { align-self: center; max-width: 100%; text-align: center; } }
+  .classic-scope .pure-gold-container { background-color: #fbf6f0; border: 1px solid #ebdcd0; padding: 22px; border-radius: 16px; display: flex; flex-direction: column; gap: 15px; }
+  .classic-scope .pure-box-section { text-align: center; }
+  .classic-scope .pure-box-section:not(:last-child) { border-bottom: 1px dashed #ebdcd0; padding-bottom: 15px; }
+  .classic-scope .pure-gold-title { font-size: 14px; color: #a88463; font-weight: bold; margin-bottom: 6px; }
+  .classic-scope .pure-gold-value { font-size: 26px; font-weight: bold; color: #a88463; }
+  .classic-scope .refine-title { color: #718096; }
+  .classic-scope .refine-value { color: #4a5568; }
+  .classic-scope .result-button { background-color: #b59275; color: #fff; text-align: center; padding: 18px; border-radius: 12px; margin-top: 20px; }
+  .classic-scope .result-amount { font-size: 28px; font-weight: bold; }
+  .classic-scope .add-btn { background-color: #a88463; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 10px; width: 100%; margin-top: 15px; cursor: pointer; }
+  .classic-scope .add-btn:hover { background-color: #8e6f50; }
+  .classic-scope .clear-btn { background-color: #f5f5f5; color: #cc0000; border: 1px solid #ddd; padding: 10px 18px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+  .classic-scope .clear-btn:hover { background-color: #ffe6e6; }
+  .classic-scope .hidden-element { display: none !important; }
+  .classic-scope h2 { color: #a88463; text-align: center; margin: 0; font-size: 28px; }
+  .classic-scope h3 { color: #a88463; margin: 0; font-size: 22px; }
+  .classic-scope .subtitle { color: #a88463; text-align: center; font-size: 14px; margin-top: 0; margin-bottom: 20px; opacity: 0.8; }
+</style>
+
+<div class="classic-scope">
+<div class="main-wrapper">
+
+  <div class="left-container">
+    <div class="calculator-container">
+      <h2>ดาริน คอลเลคชั่น</h2>
+      <p class="subtitle" id="ccSubTitleText">ระบบคำนวณราคาทองคำอัตโนมัติ (คลาสสิก)</p>
+
+      <div class="calc-mode-container">
+        <button id="ccGoldModeBtn" class="mode-btn active-gold" onclick="ccSwitchMode('GOLD')">🟡 คำนวณทองคำ</button>
+        <button id="ccSilverModeBtn" class="mode-btn" onclick="ccSwitchMode('SILVER')">⚪ คำนวณแร่เงิน</button>
+      </div>
+
+      <form onsubmit="return false;">
+        <div class="cc-row">
+          <div class="cc-form-group">
+            <label id="ccLblRefPrice">1. ราคาอ้างอิงทอง (บาทละ)</label>
+            <input type="number" id="ccRefPrice" placeholder="เช่น 70000">
+          </div>
+          <div class="cc-form-group" id="ccExtraPriceFormGroup">
+            <label>4. ราคา + พิเศษ (บาท)</label>
+            <input type="number" id="ccExtraPrice" placeholder="เช่น 1800">
+          </div>
+        </div>
+
+        <div class="cc-row">
+          <div class="cc-form-group">
+            <label>3. น้ำหนัก (กรัม)</label>
+            <input type="number" step="0.001" id="ccWeight" placeholder="เช่น 15.24">
+          </div>
+          <div class="cc-form-group">
+            <label>2. เปอร์เซ็นต์ (%)</label>
+            <input type="number" step="0.01" id="ccPercent" placeholder="เช่น 90">
+          </div>
+        </div>
+
+        <div class="cc-form-group" style="margin-bottom:15px;">
+          <label>ราคาต่อกรัมสุทธิ (ระบบคำนวณอัตโนมัติ)</label>
+          <input type="text" id="ccPricePerGram" style="background:#fbf6f0; color:#a88463; font-weight:bold;" placeholder="รอดำเนินการคำนวณ..." readonly>
+        </div>
+
+        <div class="result-button">
+          <div style="font-size:14px; margin-bottom:5px; opacity:0.9;">ราคารับซื้อสุทธิ</div>
+          <div class="result-amount" id="ccTotalResult">0 บาท</div>
+        </div>
+
+        <button class="add-btn" onclick="ccAddRecordToTable()">➕ บันทึกลงตาราง</button>
+      </form>
+    </div>
+
+    <div class="pure-gold-container">
+      <div class="pure-box-section">
+        <div class="pure-gold-title" id="ccLblPureGoldBox">✨ น้ำหนักทองเพียว 99.99% รวมทั้งหมด</div>
+        <div class="pure-gold-value" id="ccTotalPureGoldDisplay">0.000 กรัม</div>
+      </div>
+      <div class="pure-box-section" id="ccLeftRefineBoxSection">
+        <div class="pure-gold-title refine-title">💸 รวมค่าสกัดทั้งหมดที่ต้องจ่าย (คำนวณจากน้ำหนักรวม)</div>
+        <div class="pure-gold-value refine-value" id="ccTotalRefineDisplay">0 บาท</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-table-container">
+
+    <div class="tab-control-bar">
+      <button id="ccTabCurrentBtn" class="cc-tab-btn active-tab" onclick="ccSwitchTab('CURRENT')">📋 หน้าปัจจุบัน (ตารางทำงาน)</button>
+      <button id="ccTabHistoryBtn" class="cc-tab-btn" onclick="ccSwitchTab('HISTORY')">🕒 ประวัติบันทึกปิดยอด</button>
+    </div>
+
+    <div id="ccPaneCurrent">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 id="ccLblTableTitle">📋 รายการบันทึกการซื้อขาย (ทองคำ)</h3>
+        <div style="display:flex; gap:10px;">
+          <button class="save-to-history-btn" onclick="ccSaveCurrentToHistory()">💾 บันทึกปิดยอดลงประวัติ</button>
+          <button class="clear-btn" onclick="ccClearTable()">🗑️ ล้างตาราง</button>
+        </div>
+      </div>
+
+      <div class="table-scroll-wrapper">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding-left: 20px;">1. รายการ</th>
+              <th>2. น้ำหนัก (กรัม)</th>
+              <th>3. เปอร์เซ็นต์ (%)</th>
+              <th id="ccThPricePerGram">4. ราคาต่อกรัม (บาท)</th>
+              <th id="ccThPureGold">5. ทองเพียว (กรัม)</th>
+              <th>6. จำนวนเงิน (ทศนิยม 3 ตำแหน่ง)</th>
+              <th>7. จำนวนจ่าย (ปัดขึ้น 1 บาท)</th>
+            </tr>
+          </thead>
+          <tbody id="ccTableBody"></tbody>
+          <tfoot>
+            <tr class="summary-row">
+              <td style="text-align: left; padding-left: 20px;">รวมทั้งหมด</td>
+              <td id="ccTotalWeightSum">0.000 กรัม</td>
+              <td id="ccAveragePercentSum">0.000%</td> 
+              <td id="ccAvgPricePerGramSum">0.0 บาท</td>
+              <td id="ccTotalPureGoldSum">0.000 กรัม</td>
+              <td id="ccTotalAmountSum">0.000 บาท</td> 
+              <td id="ccTotalPaymentSum" class="pay-column">0 บาท</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div id="ccSilverNetPayBox" class="silver-net-pay-container hidden-element">
+        <div class="silver-net-title">💵 จำนวนจ่ายสุทธิของแร่เงิน (รวมจำนวนจ่าย - ค่าสกัดรวม)</div>
+        <div class="silver-net-value" id="ccSilverNetPayDisplay">0 บาท</div>
+      </div>
+    </div>
+
+    <div id="ccPaneHistory" class="hidden-element">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>🕒 รายการประวัติปิดยอดที่บันทึกไว้</h3>
+        <button class="clear-btn" onclick="ccClearAllHistory()">🚨 ล้างประวัติทั้งหมด</button>
+      </div>
+
+      <div id="ccHistoryContainer" class="history-list"></div>
+
+      <div class="history-grand-total">
+        <span>📊 ยอดจ่ายสะสมรวมของวันนี้:</span>
+        <span id="ccGrandTotalDisplay">ทองคำ: 0 บาท | แร่เงิน: 0 บาท</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="ccDetailModal" class="modal-overlay hidden-element">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="ccModalTitleText">🔎 รายละเอียดรายการย่อยในบิล</div>
+      <button class="modal-close-x" onclick="ccCloseModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px; font-size:14px; color:#555;" id="ccModalMetaInfo"></div>
+      <div class="table-scroll-wrapper" style="margin-top:0; max-height:350px;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding-left:15px;">รายการ</th>
+              <th>น้ำหนัก (กรัม)</th>
+              <th>เปอร์เซ็นต์ (%)</th>
+              <th>ราคาต่อกรัม</th>
+              <th>เพียว (กรัม)</th>
+              <th>จำนวนจ่าย</th>
+            </tr>
+          </thead>
+          <tbody id="ccModalTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-close-modal" onclick="ccCloseModal()">❌ ปิดหน้าต่างนี้</button>
+    </div>
+  </div>
+</div>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        const CLOUD_URL = "https://script.google.com/macros/s/AKfycbyRxwiLp4JYaWkl2oR1omTycfPm3WIsBBfDbw91Ycbdeqi9AC2KGd5Xg0IEO6z2LevM/exec";
+
+        let allBranchRatesMap = {}; 
+        let branchRatesConfig = { gb_t1:100, gb_t2:120, gb_t3:150, gb_t4:200, gj_t1:200, gj_t2:220, gj_t3:250, gj_t4:300, gm_t1:200, gm_t2:500, gm_t3:400, gm_t4:300, gm_t5:250, gm_t6:200, gm_t7:150, gm_t8:125, gm_t9:100 }; 
+        let myAllowedBranches = [];
+        let currentShopName = ""; let currentBranchName = ""; let currentUserRole = "";
+        let batchBillItems = [];
+        let cloudTransactionsCache = [];
+
+        function getStoredCredentials() {
+            return {
+                user: localStorage.getItem('DCSG_CURRENT_USER') || "",
+                pass: localStorage.getItem('DCSG_CURRENT_PASS') || "",
+                token: getOrCreateDeviceToken()
+            };
+        }
+
+        function getOrCreateDeviceToken() {
+            let token = localStorage.getItem('dcsg_device_token');
+            if (!token) {
+                token = 'DCSG-DEV-' + Math.random().toString(36).substring(2, 11).toUpperCase();
+                localStorage.setItem('dcsg_device_token', token);
+            }
+            return token;
+        }
+
+        function switchAuthTab(mode) {
+            if (mode === 'login') {
+                document.getElementById('tabLogin').className = 'tab-btn active'; document.getElementById('tabRegister').className = 'tab-btn';
+                document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none';
+            } else {
+                document.getElementById('tabRegister').className = 'tab-btn active'; document.getElementById('tabLogin').className = 'tab-btn';
+                document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block';
+            }
+        }
+
+        function triggerLiveStoreSignup() {
+            const shop = document.getElementById('regShop').value.trim(); const display = document.getElementById('regDisplay').value.trim(); const user = document.getElementById('regUser').value.trim(); const pass = document.getElementById('regPass').value.trim(); const role = document.getElementById('regRole').value;
+            document.getElementById('authLoading').style.display = 'flex';
+            fetch(`${CLOUD_URL}?action=registerUser&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&role=${encodeURIComponent(role)}&displayName=${encodeURIComponent(display)}&shop=${encodeURIComponent(shop)}`, { method: "GET" })
+            .then(res => res.json()).then(data => { document.getElementById('authLoading').style.display = 'none'; document.getElementById('authForms').style.display = 'none'; document.getElementById('successView').style.display = 'block'; })
+            .catch(err => { document.getElementById('authLoading').style.display = 'none'; document.getElementById('authForms').style.display = 'none'; document.getElementById('successView').style.display = 'block'; });
+        }
+
+        function triggerLiveStoreLogin() {
+            const user = document.getElementById('loginUser').value.trim(); const pass = document.getElementById('loginPass').value.trim(); const token = getOrCreateDeviceToken();
+            document.getElementById('authLoading').style.display = 'flex';
+            fetch(`${CLOUD_URL}?action=loginCheck&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&token=${encodeURIComponent(token)}`, { method: "GET" })
+            .then(res => res.json()).then(data => {
+                document.getElementById('authLoading').style.display = 'none';
+                if(data.success) {
+                    localStorage.setItem('DCSG_CURRENT_USER', user); localStorage.setItem('DCSG_CURRENT_PASS', pass);
+                    renderDashboardWorkspace(data, user);
+                } else { alert("⚠️ ปฏิเสธการเข้าใช้งานระบบ: " + data.message); }
+            }).catch(err => { document.getElementById('authLoading').style.display = 'none'; alert("❌ ระบบขัดข้อง: ไม่สามารถติดต่อหลังบ้านได้"); });
+        }
+
+        function checkAutoLoginSession() {
+            const savedUser = localStorage.getItem('DCSG_CURRENT_USER'); const savedPass = localStorage.getItem('DCSG_CURRENT_PASS'); const token = getOrCreateDeviceToken();
+            if (savedUser && savedPass) {
+                document.getElementById('authLoading').style.display = 'flex'; document.getElementById('authLoading').innerText = "⏳ กำลังซิงค์กู้คืนเซสชันล็อกอินเดิมอัตโนมัติ...";
+                fetch(`${CLOUD_URL}?action=loginCheck&user=${encodeURIComponent(savedUser)}&pass=${encodeURIComponent(savedPass)}&token=${encodeURIComponent(token)}`, { method: "GET" })
+                .then(res => res.json()).then(data => {
+                    document.getElementById('authLoading').style.display = 'none';
+                    if (data.success) { renderDashboardWorkspace(data, savedUser); } 
+                    else { localStorage.removeItem('DCSG_CURRENT_USER'); localStorage.removeItem('DCSG_CURRENT_PASS'); }
+                }).catch(err => { document.getElementById('authLoading').style.display = 'none'; });
+            }
+        }
+
+        function renderDashboardWorkspace(data, user) {
+            document.getElementById('authPortal').style.display = 'none'; document.getElementById('mainDashboard').style.display = 'block'; document.body.style.background = "#faf8f5";
+            currentShopName = data.shop || (user.indexOf("_") !== -1 ? user.split("_")[0] : data.displayName); currentUserRole = data.role; myAllowedBranches = data.allowedBranches.split(", "); currentBranchName = myAllowedBranches[0]; 
+            
+            applyRatesFromServer(data.rates);
+            document.getElementById('displayShopTitle').innerText = data.displayName;
+            refreshBranchSelectors();
+            if(currentUserRole === "Owner") {
+                document.getElementById('displayRoleTag').innerText = "👑 เจ้าของร้าน (Owner)"; document.getElementById('displayRoleTag').style.background = "#b38e6d";
+            } else { document.getElementById('displayRoleTag').innerText = "👤 พนักงาน (Staff)"; document.getElementById('displayRoleTag').style.background = "#4a3b32"; }
+            
+            calculatePriceLogic();
+            fetchTransactionsFromCloud();
+            startAutoRefresh();
+        }
+
+        function applyRatesFromServer(serverRates) {
+            if (serverRates && typeof serverRates === 'object') {
+                if (Object.keys(serverRates).some(k => typeof serverRates[k] === 'object')) {
+                    allBranchRatesMap = serverRates;
+                } else {
+                    allBranchRatesMap["default"] = serverRates;
+                }
+                updateActiveBranchRate();
+            }
+        }
+
+        function updateActiveBranchRate() {
+            if (allBranchRatesMap[currentBranchName]) {
+                branchRatesConfig = allBranchRatesMap[currentBranchName];
+            } else if (Object.keys(allBranchRatesMap).length > 0) {
+                const firstBranch = Object.keys(allBranchRatesMap)[0];
+                branchRatesConfig = allBranchRatesMap[firstBranch];
+            }
+        }
+
+        function refreshRatesFromCloud() {
+            const creds = getStoredCredentials();
+            if (!creds.user || !creds.pass) return;
+            fetch(`${CLOUD_URL}?action=loginCheck&user=${encodeURIComponent(creds.user)}&pass=${encodeURIComponent(creds.pass)}&token=${encodeURIComponent(creds.token)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        applyRatesFromServer(data.rates);
+                        calculatePriceLogic();
+                    }
+                })
+                .catch(() => {});
+        }
+
+        function refreshBranchSelectors() {
+            const knownBranches = new Set(myAllowedBranches.filter(b => b));
+            cloudTransactionsCache.forEach(item => { if (item.branch) knownBranches.add(item.branch); });
+            const branchArray = Array.from(knownBranches);
+
+            const calcSel = document.getElementById('calcBranchSelector');
+            if (calcSel) {
+                const prevValue = calcSel.value || currentBranchName;
+                calcSel.innerHTML = branchArray.map(b => `<option value="${b}">${b}</option>`).join('');
+                calcSel.value = branchArray.includes(prevValue) ? prevValue : branchArray[0];
+                currentBranchName = calcSel.value;
+                updateActiveBranchRate();
+            }
+
+            const filterSel = document.getElementById('dashboardBranchFilter');
+            if (filterSel) {
+                const prevFilter = filterSel.value || 'all';
+                filterSel.innerHTML = `<option value="all">ทุกสาขา</option>` + branchArray.map(b => `<option value="${b}">${b}</option>`).join('');
+                filterSel.value = (prevFilter === 'all' || branchArray.includes(prevFilter)) ? prevFilter : 'all';
+            }
+        }
+
+        function onBranchSelectorChange() {
+            const calcSel = document.getElementById('calcBranchSelector');
+            if (calcSel) {
+                currentBranchName = calcSel.value;
+                updateActiveBranchRate();
+                calculatePriceLogic();
+            }
+        }
+
+        function fetchTransactionsFromCloud(silent) {
+            const tbody = document.getElementById('dashboardTableBody');
+            if (!silent && tbody) tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#a39284; padding:20px;">⏳ กำลังโหลดข้อมูลธุรกรรมจากคลาวด์...</td></tr>`;
+            const creds = getStoredCredentials();
+            fetch(`${CLOUD_URL}?action=getTransactions&user=${encodeURIComponent(creds.user)}&pass=${encodeURIComponent(creds.pass)}&token=${encodeURIComponent(creds.token)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success === false) {
+                        if (!silent) alert("⚠️ " + (data.message || "ไม่สามารถโหลดข้อมูลได้ กรุณาล็อกอินใหม่"));
+                        return;
+                    }
+                    cloudTransactionsCache = data.transactions || [];
+                    refreshBranchSelectors();
+                    rebuildLargeDashboardTableHTML();
+                })
+                .catch(() => {
+                    if (!silent && tbody) tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#c94c4c; padding:20px;">❌ โหลดข้อมูลจากคลาวด์ไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองรีเฟรชใหม่</td></tr>`;
+                });
+        }
+
+        let autoRefreshTimer = null;
+        function startAutoRefresh() {
+            if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+            autoRefreshTimer = setInterval(() => {
+                fetchTransactionsFromCloud(true);
+                refreshRatesFromCloud();
+            }, 12000);
+        }
+        function stopAutoRefresh() {
+            if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
+        }
+
+        function getRateValue(val, fallback) {
+            if (val !== undefined && val !== null && val !== "" && !isNaN(Number(val))) {
+                return Number(val);
+            }
+            return fallback;
+        }
+
+        function calculatePriceLogic() {
+            const basePrice = parseFloat(document.getElementById('basePrice').value) || 0; 
+            const weightGrams = parseFloat(document.getElementById('weightGrams').value) || 0; 
+            const goldType = document.getElementById('goldType').value; 
+            const silverType = document.getElementById('silverType').value; 
+            const purityPercentage = (parseFloat(document.getElementById('meltedPurity').value) || 0) / 100;
+            let pricePerGram = 0; const weightInBaht = weightGrams / 15.24; const cheatSheet = document.getElementById('cheatSheetContent'); const r = branchRatesConfig;
+            
+            if(!r) { cheatSheet.innerHTML = "⚠️ สาขานี้ยังไม่ได้รับการกำหนดเรทถอยพรีเมียมจากแอดมิน"; return; }
+            
+            const refPrice = basePrice - 1000;
+
+            if (goldType !== "ไม่ใช่ทองคำ") {
+                let pricePerGramFull = refPrice * 0.0656 * purityPercentage;
+
+                if (goldType === "ทองคำแท่ง") {
+                    let discount = getRateValue(r.gb_t4, 200);
+                    if (Math.abs(weightInBaht - 1) < 0.001) discount = getRateValue(r.gb_t1, 100); 
+                    else if (weightInBaht > 1 && weightInBaht <= 3) discount = getRateValue(r.gb_t2, 120); 
+                    else if (weightInBaht > 3 && weightInBaht <= 5) discount = getRateValue(r.gb_t3, 150);
+                    
+                    pricePerGram = (refPrice - discount) * 0.0656; cheatSheet.innerHTML = `<b>ทองคำแท่ง:</b> หักราคาตั้งค่าบาทละ <b>${discount} บาท</b> ตามช่วงน้ำหนัก`;
+                } else if (goldType === "ทองรูปพรรณ") {
+                    let discount = getRateValue(r.gj_t4, 300); const fee = basePrice * 0.036; 
+                    if (Math.abs(weightInBaht - 1) < 0.001) discount = getRateValue(r.gj_t1, 200);
+                    
+                    pricePerGram = (basePrice - fee - discount) * 0.0656; cheatSheet.innerHTML = `<b>ทองรูปพรรณ:</b> หักเสื่อม 3.6% และหักเรทสาขา <b>${discount} บาท</b>`;
+                } else if (goldType === "ทองหลอม") {
+                    let discount = getRateValue(r.gm_t9, 100); 
+                    if (weightGrams > 0 && weightGrams <= 1) discount = getRateValue(r.gm_t1, 200); 
+                    else if (weightGrams > 1 && weightGrams <= 3) discount = getRateValue(r.gm_t2, 500); 
+                    else if (weightGrams > 3 && weightGrams <= 5) discount = getRateValue(r.gm_t3, 400); 
+                    else if (weightGrams > 5 && weightGrams <= 10) discount = getRateValue(r.gm_t4, 300); 
+                    else if (weightGrams > 10 && weightGrams <= 15) discount = getRateValue(r.gm_t5, 250); 
+                    else if (weightGrams > 15 && weightGrams <= 20) discount = getRateValue(r.gm_t6, 200); 
+                    else if (weightGrams > 20 && weightGrams <= 25) discount = getRateValue(r.gm_t7, 150); 
+                    else if (weightGrams > 25 && weightGrams <= 30) discount = getRateValue(r.gm_t8, 125);
+                    
+                    pricePerGram = pricePerGramFull - discount; cheatSheet.innerHTML = `<b>ทองหลอม:</b> หักราคาสูตรหลอมหน่วยเนื้อกรัมละ <b>${discount} บาท</b>`;
+                }
+            } else if (silverType !== "ไม่ใช่แร่เงิน") {
+                document.getElementById('basePriceLabel').innerText = "ราคาเงินอ้างอิง (ต่อหน่วยกรัม)";
+                if (silverType === "เงินแท่ง") { pricePerGram = basePrice - (basePrice * 0.07); cheatSheet.innerHTML = `<b>เงินแท่ง:</b> คิดราคาเนื้อเสื่อมสภาพลดทอนหัก 7%`; }
+                else if (silverType === "เงินหลอม") { 
+                    let discount = getRateValue(r.sm_t3, 5); 
+                    if (weightGrams > 0 && weightGrams <= 50) discount = getRateValue(r.sm_t1, 15); 
+                    else if (weightGrams > 50 && weightGrams <= 100) discount = getRateValue(r.sm_t2, 10); 
+                    pricePerGram = (basePrice * purityPercentage) - discount; cheatSheet.innerHTML = `<b>เงินหลอม:</b> ลบส่วนต่างเรทประจำสาขาออก <b>${discount} บาท</b>`; 
+                }
+            }
+            if(pricePerGram < 0) pricePerGram = 0; document.getElementById('pricePerGram').value = pricePerGram.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " บาท/กรัม";
+        }
+
+        function onCategoryTypeChange(category) {
+            if(category === 'gold') { document.getElementById('silverType').value = "ไม่ใช่แร่เงิน"; document.getElementById('meltedPurityGroup').classList.remove('hidden'); document.getElementById('meltedPurity').value = document.getElementById('goldType').value === "ทองหลอม" ? "90.0" : "96.5"; }
+            else { document.getElementById('goldType').value = "ไม่ใช่ทองคำ"; if(document.getElementById('silverType').value === "เงินแท่ง") { document.getElementById('meltedPurityGroup').classList.add('hidden'); } else { document.getElementById('meltedPurityGroup').classList.remove('hidden'); document.getElementById('meltedPurity').value = "92.5"; } }
+            calculatePriceLogic();
+        }
+
+        function setWeightShortcut(grams) { document.getElementById('weightGrams').value = grams; calculatePriceLogic(); }
+        
+        function pushItemToBill() {
+            const goldType = document.getElementById('goldType').value; const silverType = document.getElementById('silverType').value; const typeLabel = goldType !== "ไม่ใช่ทองคำ" ? goldType : silverType; const weight = parseFloat(document.getElementById('weightGrams').value) || 0; 
+            const purityText = document.getElementById('meltedPurity').value + "%";
+            const pricePerGram = parseFloat(document.getElementById('pricePerGram').value.replace(/,/g, '')) || 0;
+            const currentStatus = "รอขาย";
+
+            if(weight <= 0) { alert("กรุณากรอกน้ำหนักชิ้นงานให้ถูกต้องก่อนครับ"); return; }
+
+            let itemTotalPay = pricePerGram * weight;
+            batchBillItems.push({ 
+                type: typeLabel, 
+                weight: weight, 
+                cost: itemTotalPay, 
+                purity: purityText,
+                status: currentStatus
+            }); 
+            updateBillTableRender();
+        }
+
+        function updateBillTableRender() {
+            const tbody = document.getElementById('itemTableBody'); if(batchBillItems.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr>`; document.getElementById('totalResult').innerText = "0.00 บาท"; return; }
+            tbody.innerHTML = ""; let grandTotal = 0; 
+            batchBillItems.forEach((item, index) => { 
+                grandTotal += item.cost; 
+                const row = document.createElement('tr'); 
+                row.innerHTML = `
+                    <td><b>${item.type}</b></td>
+                    <td>${item.weight.toFixed(2)}</td>
+                    <td><b>${item.cost.toLocaleString('th-TH')}.-</b></td>
+                    <td><button class="btn-delete-row" onclick="removeSingleItemRow(${index})">❌ ลบ</button></td>
+                `; 
+                tbody.appendChild(row); 
+            });
+            document.getElementById('totalResult').innerText = grandTotal.toLocaleString('th-TH', {minimumFractionDigits:2}) + " บาท";
+        }
+
+        function removeSingleItemRow(index) {
+            batchBillItems.splice(index, 1);
+            updateBillTableRender();
+        }
+
+        function commitBillToCloudAndDashboard() {
+            if(batchBillItems.length === 0) { alert("ไม่มีรายการสินค้าสะสมในบิลตั๋วให้กดบันทึกครับบอส"); return; }
+
+            const saveButton = document.querySelector('.btn-send-sheet');
+            if (saveButton) { saveButton.disabled = true; saveButton.innerText = "⏳ กำลังบันทึก..."; }
+
+            const creds = getStoredCredentials();
+            const savePromises = batchBillItems.map(item => {
+                const params = new URLSearchParams({
+                    action: "addTransaction",
+                    user: creds.user,
+                    pass: creds.pass,
+                    token: creds.token,
+                    branch: currentBranchName || "สาขา 1",
+                    type: item.type,
+                    weight: item.weight,
+                    amount: item.cost,
+                    purity: item.purity,
+                    status: item.status
+                });
+                return fetch(`${CLOUD_URL}?${params.toString()}`).then(res => res.json());
+            });
+
+            Promise.all(savePromises)
+                .then(results => {
+                    const allOk = results.every(r => r && r.success);
+                    if (allOk) {
+                        alert("☁️ บันทึกข้อมูลคลาวด์และเข้าหน้าตารางแดชบอร์ดสรุปเสร็จสิ้น!");
+                    } else {
+                        alert("⚠️ บันทึกสำเร็จบางรายการ กรุณาตรวจสอบตารางแดชบอร์ดอีกครั้ง");
+                    }
+                    batchBillItems = [];
+                    updateBillTableRender();
+                    fetchTransactionsFromCloud();
+                })
+                .catch(() => {
+                    alert("❌ บันทึกขึ้นคลาวด์ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่");
+                })
+                .finally(() => {
+                    if (saveButton) { saveButton.disabled = false; saveButton.innerText = "☁️ บันทึกเข้าชีทและแดชบอร์ด"; }
+                });
+        }
+
+        function rebuildLargeDashboardTableHTML() {
+            const tbody = document.getElementById('dashboardTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = "";
+
+            let filteredDataset = cloudTransactionsCache;
+            if(currentUserRole === "Staff" && myAllowedBranches.length > 0) {
+                filteredDataset = filteredDataset.filter(item => myAllowedBranches.includes(item.branch));
+            }
+
+            const branchFilterEl = document.getElementById('dashboardBranchFilter');
+            const branchFilterValue = branchFilterEl ? branchFilterEl.value : 'all';
+            if (branchFilterValue !== 'all') {
+                filteredDataset = filteredDataset.filter(item => item.branch === branchFilterValue);
+            }
+
+            const filterModeEl = document.getElementById('dashboardDateFilter');
+            const filterMode = filterModeEl ? filterModeEl.value : 'all';
+            if (filterMode !== 'all') {
+                const now = new Date();
+                filteredDataset = filteredDataset.filter(item => {
+                    const d = new Date(item.timestamp);
+                    if (filterMode === 'today') return d.toDateString() === now.toDateString();
+                    if (filterMode === 'month') return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+                    if (filterMode === 'year') return d.getFullYear() === now.getFullYear();
+                    return true;
+                });
+            }
+
+            if(filteredDataset.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#a39284; padding:20px;">📭 ไม่พบข้อมูลธุรกรรมตามเงื่อนไขที่เลือก</td></tr>`;
+                return;
+            }
+
+            const localAssociationPrice = parseFloat(document.getElementById('dashboardAssociationPrice').value) || 44500;
+            const localSilverPriceGrams = parseFloat(document.getElementById('dashboardSilverPriceInput').value) || 70;
+            const localSilverPricePerBaht = localSilverPriceGrams * 15.24;
+
+            const reversedData = [...filteredDataset].reverse();
+            reversedData.forEach(item => {
+                let netProfitOrLoss = 0;
+                
+                if(item.type === "เงินแท่ง" || item.type === "เงินหลอม") {
+                    netProfitOrLoss = localSilverPricePerBaht - item.costPerBaht;
+                } else {
+                    netProfitOrLoss = localAssociationPrice - item.costPerBaht;
+                }
+
+                let profitBadgeHtml = "";
+                if(netProfitOrLoss >= 0) {
+                    profitBadgeHtml = `<span class="profit-positive">+${Math.abs(netProfitOrLoss).toLocaleString('th-TH', {maximumFractionDigits:0})}</span>`;
+                } else {
+                    profitBadgeHtml = `<span class="profit-negative">-${Math.abs(netProfitOrLoss).toLocaleString('th-TH', {maximumFractionDigits:0})}</span>`;
+                }
+
+                const isLocked = item.status === 'ล็อกราคา';
+                const statusSelectHtml = `
+                    <select class="status-badge ${isLocked ? 'badge-lock' : 'badge-wait'}"
+                            style="border:none; font-weight:600; cursor:pointer;"
+                            onchange="updateItemStatus(${item.rowIndex}, this.value, this)">
+                        <option value="รอขาย" ${!isLocked ? 'selected' : ''}>⏳ รอขาย</option>
+                        <option value="ล็อกราคา" ${isLocked ? 'selected' : ''}>🔒 ล็อกราคา</option>
+                    </select>`;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.date}</td>
+                    <td><b>${item.branch}</b></td>
+                    <td><b>${item.id}</b></td>
+                    <td><b>${item.type}</b></td>
+                    <td>${item.weight.toFixed(2)}</td>
+                    <td>${item.purity}%</td>
+                    <td>${item.cost.toLocaleString('th-TH')}</td>
+                    <td>${statusSelectHtml}</td>
+                    <td><b>${item.costPerBaht.toLocaleString('th-TH', {minimumFractionDigits:2})}</b></td>
+                    <td>${profitBadgeHtml}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateItemStatus(rowIndex, newStatus, selectEl) {
+            const creds = getStoredCredentials();
+            selectEl.disabled = true;
+            fetch(`${CLOUD_URL}?action=updateTransactionStatus&rowIndex=${rowIndex}&status=${encodeURIComponent(newStatus)}&user=${encodeURIComponent(creds.user)}&pass=${encodeURIComponent(creds.pass)}&token=${encodeURIComponent(creds.token)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) { alert("⚠️ " + (data.message || "อัปเดตสถานะไม่สำเร็จ")); }
+                    fetchTransactionsFromCloud(true);
+                })
+                .catch(() => alert("❌ อัปเดตสถานะไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต"))
+                .finally(() => { selectEl.disabled = false; });
+        }
+
+        function switchDashboardTab(tabId, btn) { 
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
+            document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active')); 
+            document.getElementById(tabId).classList.add('active'); btn.classList.add('active'); 
+            
+            if(tabId === 'reportTab') {
+                fetchTransactionsFromCloud();
+            }
+            if(tabId === 'calcTab') {
+                refreshRatesFromCloud();
+            }
+        }
+
+        function triggerStoreLogout() {
+            stopAutoRefresh();
+            localStorage.removeItem('DCSG_CURRENT_USER'); localStorage.removeItem('DCSG_CURRENT_PASS');
+            currentShopName = ""; currentBranchName = ""; currentUserRole = "";
+            document.getElementById('mainDashboard').style.display = 'none'; document.getElementById('authPortal').style.display = 'block';
+            document.body.style.background = "radial-gradient(circle at center, #fdfbfa 0%, #f3ede6 100%)";
+            switchAuthTab('login');
+        }
+
+        function backToLoginView() { document.getElementById('successView').style.display = 'none'; document.getElementById('authForms').style.display = 'block'; switchAuthTab('login'); }
+
+        checkAutoLoginSession();
+    </script>
+
+    <script>
+  let ccCurrentMode = 'GOLD'; 
+  let ccGoldRecords = [];
+  let ccSilverRecords = [];
+
+  let ccPricePerGram = 0;
+  let ccRawAmount = 0;
+  let ccFinalPay = 0;
+
+  let ccSavedHistory = JSON.parse(localStorage.getItem('darin_calc_history')) || [];
+
+  function ccFormatPricePerGram(value) {
+    return (value || 0).toLocaleString('th-TH', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  }
+
+  function ccSwitchTab(tab) {
+    if (tab === 'CURRENT') {
+      document.getElementById('ccTabCurrentBtn').className = 'cc-tab-btn active-tab';
+      document.getElementById('ccTabHistoryBtn').className = 'cc-tab-btn';
+      document.getElementById('ccPaneCurrent').classList.remove('hidden-element');
+      document.getElementById('ccPaneHistory').classList.add('hidden-element');
+    } else {
+      document.getElementById('ccTabCurrentBtn').className = 'cc-tab-btn';
+      document.getElementById('ccTabHistoryBtn').className = 'cc-tab-btn active-tab';
+      document.getElementById('ccPaneCurrent').classList.add('hidden-element');
+      document.getElementById('ccPaneHistory').classList.remove('hidden-element');
+      ccRenderHistoryList();
+    }
+  }
+
+  function ccSwitchMode(mode) {
+    ccCurrentMode = mode;
+    const extraPriceGroup = document.getElementById('ccExtraPriceFormGroup');
+    const silverNetBox = document.getElementById('ccSilverNetPayBox');
+
+    if (mode === 'GOLD') {
+      document.getElementById('ccGoldModeBtn').className = 'mode-btn active-gold';
+      document.getElementById('ccSilverModeBtn').className = 'mode-btn';
+      document.getElementById('ccSubTitleText').innerText = "ระบบคำนวณราคาทองคำอัตโนมัติ (คลาสสิก)";
+      document.getElementById('ccLblRefPrice').innerText = "1. ราคาอ้างอิงทอง (บาทละ)";
+      document.getElementById('ccLblPureGoldBox').innerText = "✨ น้ำหนักทองเพียว 99.99% รวมทั้งหมด";
+      document.getElementById('ccThPureGold').innerText = "4. ทองเพียว (กรัม)";
+      document.getElementById('ccLblTableTitle').innerText = "📋 รายการบันทึกการซื้อขาย (ทองคำ)";
+      extraPriceGroup.classList.remove('hidden-element');
+      silverNetBox.classList.add('hidden-element'); 
+    } else {
+      document.getElementById('ccGoldModeBtn').className = 'mode-btn';
+      document.getElementById('ccSilverModeBtn').className = 'mode-btn active-silver';
+      document.getElementById('ccSubTitleText').innerText = "ระบบคำนวณราคาแร่เงินอัตโนมัติ (คลาสสิก)";
+      document.getElementById('ccLblRefPrice').innerText = "1. ราคาอ้างอิงเงิน (บาทละ)";
+      document.getElementById('ccLblPureGoldBox').innerText = "✨ น้ำหนักเงินเพียว รวมทั้งหมด";
+      document.getElementById('ccThPureGold').innerText = "4. เงินเพียว (กรัม)";
+      document.getElementById('ccLblTableTitle').innerText = "📋 รายการบันทึกการซื้อขาย (แร่เงิน)";
+      extraPriceGroup.classList.add('hidden-element');
+      silverNetBox.classList.remove('hidden-element'); 
+    }
+
+    document.getElementById('ccWeight').value = "";
+    document.getElementById('ccPercent').value = "";
+    document.getElementById('ccExtraPrice').value = ""; 
+
+    ccCalculateGold();
+    ccRenderTable(); 
+  }
+
+  function ccCalculateGold() {
+    const refPrice = parseFloat(document.getElementById('ccRefPrice').value) || 0;
+    const extraPrice = ccCurrentMode === 'GOLD' ? (parseFloat(document.getElementById('ccExtraPrice').value) || 0) : 0;
+    const weight = parseFloat(document.getElementById('ccWeight').value) || 0;
+    const percent = parseFloat(document.getElementById('ccPercent').value) || 0;
+
+    if (refPrice === 0 || percent === 0) {
+      document.getElementById('ccPricePerGram').value = "รอดำเนินการคำนวณ...";
+      document.getElementById('ccTotalResult').innerText = "0 บาท";
+      ccPricePerGram = 0; ccRawAmount = 0; ccFinalPay = 0;
+      return;
+    }
+
+    if (ccCurrentMode === 'GOLD') {
+      const basePrice = refPrice + extraPrice;
+      ccPricePerGram = Math.floor((basePrice * 0.0656) * (percent / 100) * 10) / 10;
+    } else {
+      const rawPricePerGram = refPrice * (percent / 100);
+      ccPricePerGram = Math.floor(rawPricePerGram * 10) / 10; 
+    }
+
+    document.getElementById('ccPricePerGram').value = ccFormatPricePerGram(ccPricePerGram) + " บาท";
+
+    if (weight > 0) {
+      ccRawAmount = ccPricePerGram * weight;
+      ccFinalPay = Math.ceil(ccRawAmount);
+      document.getElementById('ccTotalResult').innerText = ccFinalPay.toLocaleString('th-TH') + " บาท";
+    } else {
+      document.getElementById('ccTotalResult').innerText = "0 บาท";
+      ccRawAmount = 0; ccFinalPay = 0;
+    }
+  }
+
+  function ccAddRecordToTable() {
+    const weight = parseFloat(document.getElementById('ccWeight').value) || 0;
+    const percent = parseFloat(document.getElementById('ccPercent').value) || 0;
+    if (ccPricePerGram === 0 || weight === 0 || percent === 0) {
+      alert("กรุณากรอกข้อมูล ราคาอ้างอิง, เปอร์เซ็นต์ และ น้ำหนัก ให้ครบถ้วนก่อนบันทึกครับ");
+      return;
+    }
+
+    const recordData = {
+      weight: weight, percent: percent, pricePerGram: ccPricePerGram,
+      rawAmount: ccRawAmount, finalPay: ccFinalPay, pureGold: weight * (percent / 100)
+    };
+
+    if (ccCurrentMode === 'GOLD') {
+      ccGoldRecords.push(recordData);
+    } else {
+      ccSilverRecords.push(recordData);
+    }
+
+    ccRenderTable();
+    document.getElementById('ccWeight').value = "";
+    document.getElementById('ccPercent').value = "";
+    document.getElementById('ccTotalResult').innerText = "0 บาท";
+    ccRawAmount = 0; ccFinalPay = 0;
+  }
+
+  function ccDeleteRecord(index) {
+    if (confirm(`คุณต้องการลบบันทึกข้อมูลแถวนี้ใช่หรือไม่?`)) {
+      if (ccCurrentMode === 'GOLD') {
+        ccGoldRecords.splice(index, 1);
+      } else {
+        ccSilverRecords.splice(index, 1);
+      }
+      ccRenderTable();
+    }
+  }
+
+  function ccRenderTable() {
+    const leftRefineBox = document.getElementById('ccLeftRefineBoxSection');
+    (ccCurrentMode === 'GOLD') ? leftRefineBox.classList.add('hidden-element') : leftRefineBox.classList.remove('hidden-element');
+
+    const tbody = document.getElementById('ccTableBody');
+    tbody.innerHTML = ""; 
+
+    let tW=0, tP=0, tA=0, tPay=0;
+
+    const activeRecords = (ccCurrentMode === 'GOLD') ? ccGoldRecords : ccSilverRecords;
+    const itemLabel = (ccCurrentMode === 'GOLD') ? `🟡 ทอง` : `⚪ เงิน`;
+
+    activeRecords.forEach((record, index) => {
+      tW += record.weight; tP += record.pureGold; tA += record.rawAmount; tPay += record.finalPay;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="item-name-cell" style="text-align:left; padding-left:10px;"><button class="delete-row-btn" onclick="ccDeleteRecord(${index})">✕</button> ${itemLabel}ก้อนที่ ${index+1}</td>
+        <td>${record.weight.toFixed(3)}</td>
+        <td>${record.percent}%</td>
+        <td>${ccFormatPricePerGram(record.pricePerGram)}</td>
+        <td>${record.pureGold.toFixed(3)}</td>
+        <td>${record.rawAmount.toLocaleString('th-TH', {minimumFractionDigits:3, maximumFractionDigits:3})} บาท</td>
+        <td class="pay-column">${record.finalPay.toLocaleString('th-TH')} บาท</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    for (let i = activeRecords.length; i < 15; i++) {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td class="empty-row-text" style="text-align:left; padding-left:55px;">ก้อนที่ ${i+1}</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>`;
+      tbody.appendChild(row);
+    }
+
+    let refineRate = (tW <= 500) ? 2.25 : (tW <= 1000) ? 2.00 : 1.75;
+    let tRef = tW * refineRate;
+    let sNet = tPay - tRef;
+    let avgPricePerGram = tW > 0 ? (tA / tW) : 0;
+
+    document.getElementById('ccTotalWeightSum').innerText = tW.toFixed(3) + " กรัม";
+    document.getElementById('ccAveragePercentSum').innerText = (tW > 0 ? (tP/tW*100).toFixed(3) : "0.000") + "%"; 
+    document.getElementById('ccAvgPricePerGramSum').innerText = ccFormatPricePerGram(avgPricePerGram) + " บาท";
+    document.getElementById('ccTotalPureGoldSum').innerText = tP.toFixed(3) + " กรัม"; 
+    document.getElementById('ccTotalAmountSum').innerText = tA.toLocaleString('th-TH', {minimumFractionDigits:3, maximumFractionDigits:3}) + " บาท";
+    document.getElementById('ccTotalPaymentSum').innerText = tPay.toLocaleString('th-TH') + " บาท";
+
+    document.getElementById('ccTotalPureGoldDisplay').innerText = tP.toFixed(3) + " กรัม";
+    document.getElementById('ccTotalRefineDisplay').innerText = tRef.toLocaleString('th-TH', {minimumFractionDigits:2, maximumFractionDigits:2}) + " บาท"; 
+    document.getElementById('ccSilverNetPayDisplay').innerText = (sNet > 0 ? sNet : 0).toLocaleString('th-TH', {minimumFractionDigits:2, maximumFractionDigits:2}) + " บาท";
+  }
+
+  function ccClearTable() {
+    const labelMode = (ccCurrentMode === 'GOLD') ? "ทองคำ" : "แร่เงิน";
+    if (confirm(`คุณต้องการล้างรายการบันทึกทั้งหมดของ (${labelMode}) เพื่อเริ่มใหม่ใช่หรือไม่?`)) { 
+      if (ccCurrentMode === 'GOLD') {
+        ccGoldRecords = []; 
+      } else {
+        ccSilverRecords = [];
+      }
+      ccRenderTable(); 
+    }
+  }
+
+  function ccSaveCurrentToHistory() {
+    const activeRecords = (ccCurrentMode === 'GOLD') ? ccGoldRecords : ccSilverRecords;
+    if (activeRecords.length === 0) {
+      alert("ไม่มีข้อมูลในตารางปัจจุบันที่จะทำการบันทึกปิดยอดครับ");
+      return;
+    }
+
+    let customName = prompt("กรุณากรอกชื่อลูกค้าหรือช่างผู้ขาย (หากไม่ระบุให้เว้นว่างไว้แล้วกดตกลง):", "");
+    if (customName === null) return;
+    if (customName.trim() === "") customName = "ไม่ระบุชื่อ";
+
+    let totalWeight = 0, totalPure = 0, totalPay = 0;
+    activeRecords.forEach(r => {
+      totalWeight += r.weight;
+      totalPure += r.pureGold;
+      totalPay += r.finalPay;
+    });
+
+    let finalNetPayment = totalPay;
+    if (ccCurrentMode === 'SILVER') {
+      let refineRate = (totalWeight <= 500) ? 2.25 : (totalWeight <= 1000) ? 2.00 : 1.75;
+      let totalRefine = totalWeight * refineRate;
+      finalNetPayment = totalPay - totalRefine;
+    }
+
+    const now = new Date();
+    const timeString = now.toLocaleDateString('th-TH') + " - " + now.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}) + " น.";
+
+    const billHistoryItem = {
+      id: Date.now(),
+      type: ccCurrentMode,
+      clientName: customName,
+      time: timeString,
+      weightSum: totalWeight,
+      pureSum: totalPure,
+      netSum: finalNetPayment,
+      details: JSON.parse(JSON.stringify(activeRecords))
+    };
+
+    ccSavedHistory.unshift(billHistoryItem);
+    localStorage.setItem('darin_calc_history', JSON.stringify(ccSavedHistory));
+
+    alert(`💾 บันทึกประวัติบิลของ "${customName}" เรียบร้อยแล้ว ระบบจะทำการล้างตารางทำงานเพื่อเริ่มงานบิลถัดไปครับ`);
+
+    if (ccCurrentMode === 'GOLD') { ccGoldRecords = []; } else { ccSilverRecords = []; }
+    ccRenderTable();
+  }
+
+  function ccRenderHistoryList() {
+    const container = document.getElementById('ccHistoryContainer');
+    container.innerHTML = "";
+
+    if (ccSavedHistory.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa; font-style:italic;">ยังไม่มีรายการประวัติการปิดยอดในวันนี้</div>`;
+      document.getElementById('ccGrandTotalDisplay').innerText = "ทองคำ: 0 บาท | แร่เงิน: 0 บาท";
+      return;
+    }
+
+    let goldGrandTotal = 0, silverGrandTotal = 0;
+
+    ccSavedHistory.forEach((item, index) => {
+      if (item.type === 'GOLD') { goldGrandTotal += item.netSum; } else { silverGrandTotal += item.netSum; }
+
+      const typeBadge = item.type === 'GOLD' ? '🟡 ทองคำ' : '⚪ แร่เงิน';
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      div.innerHTML = `
+        <div class="history-item-header">
+          <span>📅 เวลา: ${item.time}</span>
+          <strong>ประเภท: ${typeBadge}</strong>
+        </div>
+        <div class="history-item-body">
+          <div class="history-summary-text">
+            👤 ผู้ขาย: <b>${item.clientName}</b> | น้ำหนักรวม: <b>${item.weightSum.toFixed(3)} กรัม</b> | ยอดจ่ายสุทธิ: <b style="color:#27ae60;">${Math.ceil(item.netSum).toLocaleString('th-TH')} บาท</b>
+          </div>
+          <div class="history-actions">
+            <button class="hist-btn btn-view-detail" onclick="ccViewBillDetails(${item.id})">🔎 ดูรายละเอียด</button>
+            <button class="hist-btn btn-recall" onclick="ccRecallBillToTable(${item.id})">🔍 เรียกคืนข้อมูล</button>
+            <button class="hist-btn btn-delete-hist" onclick="ccDeleteHistoryItem(${item.id})">❌ ลบ</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    document.getElementById('ccGrandTotalDisplay').innerText = `ทองคำ: ${goldGrandTotal.toLocaleString('th-TH')} บาท | แร่เงิน: ${Math.ceil(silverGrandTotal).toLocaleString('th-TH')} บาท`;
+  }
+
+  function ccDeleteHistoryItem(id) {
+    if (confirm("คุณต้องการลบประวัติของรายการนี้อย่างถาวรใช่หรือไม่?")) {
+      ccSavedHistory = ccSavedHistory.filter(item => item.id !== id);
+      localStorage.setItem('darin_calc_history', JSON.stringify(ccSavedHistory));
+      ccRenderHistoryList();
+    }
+  }
+
+  function ccClearAllHistory() {
+    if (confirm("⚠️ คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติการคำนวณทั้งหมดของวันนี้? ข้อมูลทั้งหมดจะหายไปอย่างถาวร")) {
+      ccSavedHistory = [];
+      localStorage.removeItem('darin_calc_history');
+      ccRenderHistoryList();
+    }
+  }
+
+  function ccRecallBillToTable(id) {
+    const targetBill = ccSavedHistory.find(item => item.id === id);
+    if (!targetBill) return;
+
+    if (confirm(`คุณต้องการดึงข้อมูลของ "${targetBill.clientName}" กลับไปแทนที่ในตารางทำงานปัจจุบันใช่หรือไม่?`)) {
+      ccSwitchMode(targetBill.type);
+      if (targetBill.type === 'GOLD') {
+        ccGoldRecords = JSON.parse(JSON.stringify(targetBill.details));
+      } else {
+        ccSilverRecords = JSON.parse(JSON.stringify(targetBill.details));
+      }
+      ccRenderTable();
+      ccSwitchTab('CURRENT');
+      alert("เรียกคืนข้อมูลลงตารางปัจจุบันสำเร็จแล้ว สามารถแก้ไขต่อได้ทันทีครับ");
+    }
+  }
+
+  function ccViewBillDetails(id) {
+    const targetBill = ccSavedHistory.find(item => item.id === id);
+    if (!targetBill) return;
+
+    const labelSymbol = targetBill.type === 'GOLD' ? '🟡 ทอง' : '⚪ เงิน';
+    document.getElementById('ccModalTitleText').innerText = `🔎 รายละเอียดบิลรับซื้อ [ ประเภท: ${targetBill.type === 'GOLD' ? 'ทองคำ' : 'แร่เงิน'} ]`;
+    document.getElementById('ccModalMetaInfo').innerHTML = `👤 ผู้ขาย: <b>${targetBill.clientName}</b> <br>📅 บันทึกเมื่อ: ${targetBill.time}`;
+
+    const mBody = document.getElementById('ccModalTableBody');
+    mBody.innerHTML = "";
+
+    targetBill.details.forEach((record, index) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:left; padding-left:15px;">${labelSymbol}ก้อนที่ ${index+1}</td>
+        <td>${record.weight.toFixed(3)}</td>
+        <td>${record.percent}%</td>
+        <td>${ccFormatPricePerGram(record.pricePerGram)}</td>
+        <td>${record.pureGold.toFixed(3)}</td>
+        <td style="font-weight:bold; color:#b59275;">${record.finalPay.toLocaleString('th-TH')} บาท</td>
+      `;
+      mBody.appendChild(tr);
+    });
+
+    const modalTotalAmount = targetBill.details.reduce((sum, r) => sum + (r.rawAmount || 0), 0);
+    const modalAvgPricePerGram = targetBill.weightSum > 0 ? (modalTotalAmount / targetBill.weightSum) : 0;
+
+    const trSum = document.createElement('tr');
+    trSum.className = "summary-row";
+    trSum.innerHTML = `
+      <td style="text-align:left; padding-left:15px; font-weight:bold;">ยอดรวมบิล</td>
+      <td style="font-weight:bold;">${targetBill.weightSum.toFixed(3)} กรัม</td>
+      <td style="font-weight:bold;">-</td>
+      <td style="font-weight:bold;">${ccFormatPricePerGram(modalAvgPricePerGram)}</td>
+      <td style="font-weight:bold;">${targetBill.pureSum.toFixed(3)} กรัม</td>
+      <td style="font-weight:bold; color:#27ae60;">${Math.ceil(targetBill.netSum).toLocaleString('th-TH')} บาท</td>
+    `;
+    mBody.appendChild(trSum);
+
+    document.getElementById('ccDetailModal').classList.remove('hidden-element');
+  }
+
+  function ccCloseModal() {
+    document.getElementById('ccDetailModal').classList.add('hidden-element');
+  }
+
+  ccRenderTable();
+  document.getElementById('ccRefPrice').addEventListener('input', ccCalculateGold);
+  document.getElementById('ccExtraPrice').addEventListener('input', ccCalculateGold);
+  document.getElementById('ccWeight').addEventListener('input', ccCalculateGold);
+  document.getElementById('ccPercent').addEventListener('input', ccCalculateGold);
+</script>
+
+</body>
+</html>
