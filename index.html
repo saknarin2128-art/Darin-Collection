@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DCSG SYSTEM — Darin Collection</title>
     
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=Niramit:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- CSS Modules -->
     <link rel="stylesheet" href="css/style.css">
 
     <style>
@@ -35,7 +38,7 @@
             min-height: 100vh;
         }
 
-        /* Views Visibility Control */
+        /* Control display of single page views */
         .view-section {
             display: none;
             width: 100%;
@@ -145,6 +148,7 @@
             font-size: 13px;
             margin-top: 14px;
             min-height: 18px;
+            font-weight: 500;
         }
 
         /* ---------------- VIEW 2: PORTAL ---------------- */
@@ -179,6 +183,11 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-portal-logout:hover {
+            background: #ffebee;
         }
 
         .portal-hero {
@@ -276,15 +285,15 @@
         /* Locked Card Styling */
         .portal-card.locked {
             filter: grayscale(0.8);
-            opacity: 0.7;
+            opacity: 0.65;
             background: #fbf9f5;
         }
 
         .lock-overlay {
             display: none;
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 14px;
+            right: 14px;
             background: #e0e0e0;
             color: #616161;
             padding: 4px 10px;
@@ -309,13 +318,14 @@
             font-size: 12.5px;
             color: var(--text-muted);
             margin-top: 20px;
+            padding-bottom: 40px;
         }
 
         /* ---------------- VIEW 3: GOLD CALCULATOR APP ---------------- */
-        #appContainer {
+        #calculatorView {
             position: relative;
         }
-        
+
         .btn-back-portal {
             position: fixed;
             top: 14px;
@@ -324,17 +334,23 @@
             background: var(--gold-amber);
             color: #ffffff;
             border: none;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: background 0.2s;
+        }
+
+        .btn-back-portal:hover {
+            background: #b38e6d;
         }
     </style>
 </head>
 <body>
 
+    <!-- ================= VIEW 1: LOGIN ================= -->
     <div id="loginView" class="view-section active">
         <div class="login-box">
             <span class="brand-badge">DARIN COLLECTION</span>
@@ -356,11 +372,12 @@
         </div>
     </div>
 
+    <!-- ================= VIEW 2: PORTAL LAUNCHER ================= -->
     <div id="portalView" class="view-section">
         <div class="portal-nav">
             <div class="portal-brand">👑 DCSG SYSTEM</div>
             <div class="portal-user-info">
-                <span id="portalUserDisplayName" style="font-weight:600; font-size:14px;">คุณนก ดาริน</span>
+                <span id="portalUserDisplayName" style="font-weight:600; font-size:14px; color: var(--navy-dark);">คุณนก ดาริน</span>
                 <button class="btn-portal-logout" onclick="triggerAppLogout()">🚪 ออกจากระบบ</button>
             </div>
         </div>
@@ -371,6 +388,7 @@
         </div>
 
         <div class="portal-grid">
+            <!-- Card 1: Valuation -->
             <div class="portal-card" id="cardValuation">
                 <span class="lock-overlay"><i class="fa-solid fa-lock"></i> ล็อกสิทธิ์</span>
                 <div>
@@ -381,6 +399,7 @@
                 <button class="btn-card-launch" onclick="launchValuation()">🚀 เปิดระบบประเมิน</button>
             </div>
 
+            <!-- Card 2: Pawn -->
             <div class="portal-card" id="cardPawn">
                 <span class="lock-overlay"><i class="fa-solid fa-lock"></i> ล็อกสิทธิ์</span>
                 <div>
@@ -391,6 +410,7 @@
                 <button class="btn-card-launch" onclick="launchPawn()">🚀 เปิดระบบจำนำ</button>
             </div>
 
+            <!-- Card 3: Calculator -->
             <div class="portal-card" id="cardCalc">
                 <span class="lock-overlay"><i class="fa-solid fa-lock"></i> ล็อกสิทธิ์</span>
                 <div>
@@ -408,6 +428,7 @@
         </div>
     </div>
 
+    <!-- ================= VIEW 3: GOLD CALCULATOR APP ================= -->
     <div id="calculatorView" class="view-section">
         <button class="btn-back-portal" onclick="returnToPortal()"><i class="fa-solid fa-house"></i> กลับหน้าหลัก</button>
         
@@ -422,8 +443,10 @@
         </div>
     </div>
 
+    <!-- Modals Container -->
     <div id="component-modals"></div>
 
+    <!-- JavaScript Application Modules -->
     <script src="js/config.js"></script>
     <script src="js/state.js"></script>
     <script src="js/components/sidebar.js"></script>
@@ -434,10 +457,14 @@
     <script src="js/dashboard.js"></script>
     <script src="js/app.js"></script>
 
+    <!-- Portal Integration Engine -->
     <script>
-        // ลิงก์ระบบประเมินราคาและระบบจำนำ (ใส่ URL ของบอสตรงนี้)
+        // ลิงก์ระบบภายนอก (ประเมินราคา และ ฝากจำนำ)
         const URL_VALUATION = "https://darintrade-7vp8ee75.manus.space"; 
         const URL_PAWN = "https://darintrade-7vp8ee75.manus.space"; 
+
+        // ลิงก์สำรอง Google Apps Script สำหรับการเข้าถึง Real-time
+        const HARDCODED_CLOUD_URL = "https://script.google.com/macros/s/AKfycbyRxwiLp4JYaWkl2oR1omTycfPm3WIsBBfDbw91Ycbdeqi9AC2KGd5Xg0IEO6z2LevM/exec";
 
         let userPermissions = { val: "No", pawn: "No", calc: "No" };
 
@@ -468,53 +495,61 @@
 
             errorEl.innerText = "⏳ กำลังตรวจสอบสิทธิ์...";
 
-            fetch(`${CONFIG.CLOUD_URL}?action=loginCheck&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&token=${encodeURIComponent(token)}&_ts=${Date.now()}`)
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        errorEl.innerText = "";
-                        // บันทึก Session
-                        sessionStorage.setItem('dcsg_session_user', user);
-                        sessionStorage.setItem('dcsg_session_pass', pass);
-                        sessionStorage.setItem('dcsg_session_data', JSON.stringify(data));
+            // ตรวจสอบ URL หลังบ้าน
+            const targetUrl = (typeof CONFIG !== 'undefined' && CONFIG.CLOUD_URL) 
+                ? CONFIG.CLOUD_URL 
+                : HARDCODED_CLOUD_URL;
 
-                        userPermissions = data.permissions || { val: "Yes", pawn: "Yes", calc: "Yes" };
-                        
-                        // แสดงชื่อผู้ใช้
-                        document.getElementById('portalUserDisplayName').innerText = `${data.displayName || user} (${data.shop || ''})`;
+            fetch(`${targetUrl}?action=loginCheck&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&token=${encodeURIComponent(token)}&_ts=${Date.now()}`, {
+                method: 'GET',
+                redirect: 'follow'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    errorEl.innerText = "";
+                    // บันทึก Session การใช้งาน
+                    sessionStorage.setItem('dcsg_session_user', user);
+                    sessionStorage.setItem('dcsg_session_pass', pass);
+                    sessionStorage.setItem('dcsg_session_data', JSON.stringify(data));
 
-                        // อัปเดตสถานะปุ่ม Portal
-                        applyPermissionsUI();
+                    userPermissions = data.permissions || { val: "Yes", pawn: "Yes", calc: "Yes" };
+                    
+                    // แสดงชื่อผู้ใช้และชื่อร้าน
+                    document.getElementById('portalUserDisplayName').innerText = `${data.displayName || user} (${data.shop || ''})`;
 
-                        // สลับไปหน้า Portal
-                        switchView('portalView');
+                    // อัปเดตสถานะปุ่ม Portal ตามสิทธิ์
+                    applyPermissionsUI();
 
-                        // โหลดข้อมูลในแอปคำนวณทองเตรียมไว้
-                        if (typeof initializeAppSession === 'function') {
-                            initializeAppSession(data, user, pass, token);
-                        }
-                    } else {
-                        errorEl.innerText = "❌ " + (data.message || "เข้าสู่ระบบไม่สำเร็จ");
+                    // สลับไปหน้า Portal Launcher
+                    switchView('portalView');
+
+                    // เริ่มต้นสคริปต์แอปคำนวณทองคำเดิม
+                    if (typeof initializeAppSession === 'function') {
+                        initializeAppSession(data, user, pass, token);
                     }
-                })
-                .catch(err => {
-                    console.error("Login error:", err);
-                    errorEl.innerText = "❌ ไม่สามารถติดต่อเซิร์ฟเวอร์ได้";
-                });
+                } else {
+                    errorEl.innerText = "❌ " + (data.message || "เข้าสู่ระบบไม่สำเร็จ");
+                }
+            })
+            .catch(err => {
+                console.error("Login error:", err);
+                errorEl.innerText = "❌ ปัญหาการเชื่อมต่ออินเทอร์เน็ต หรือเซิร์ฟเวอร์ตอบรับผิดพลาด";
+            });
         }
 
         function applyPermissionsUI() {
-            // 1. Valuation
+            // 1. Valuation System
             const cardVal = document.getElementById('cardValuation');
             if (userPermissions.val === "Yes") cardVal.classList.remove('locked');
             else cardVal.classList.add('locked');
 
-            // 2. Pawn
+            // 2. Pawn System
             const cardPawn = document.getElementById('cardPawn');
             if (userPermissions.pawn === "Yes") cardPawn.classList.remove('locked');
             else cardPawn.classList.add('locked');
 
-            // 3. Calculator
+            // 3. Calculator System
             const cardCalc = document.getElementById('cardCalc');
             if (userPermissions.calc === "Yes") cardCalc.classList.remove('locked');
             else cardCalc.classList.add('locked');
@@ -522,7 +557,7 @@
 
         function launchValuation() {
             if (userPermissions.val !== "Yes") {
-                alert("🚫 คุณไม่มีสิทธิ์เข้าใช้งานระบบประเมินราคา (โปรดติดต่อแอดมิน)");
+                alert("🚫 บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบประเมินราคา (โปรดติดต่อบอสแอดมิน)");
                 return;
             }
             window.open(URL_VALUATION, '_blank');
@@ -530,7 +565,7 @@
 
         function launchPawn() {
             if (userPermissions.pawn !== "Yes") {
-                alert("🚫 คุณไม่มีสิทธิ์เข้าใช้งานระบบรับฝากจำนำ (โปรดติดต่อแอดมิน)");
+                alert("🚫 บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบรับฝากจำนำ (โปรดติดต่อบอสแอดมิน)");
                 return;
             }
             window.open(URL_PAWN, '_blank');
@@ -538,7 +573,7 @@
 
         function launchCalculator() {
             if (userPermissions.calc !== "Yes") {
-                alert("🚫 คุณไม่มีสิทธิ์เข้าใช้งานระบบคำนวณราคาทองคำ (โปรดติดต่อแอดมิน)");
+                alert("🚫 บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบคำนวณราคาทองคำ (โปรดติดต่อบอสแอดมิน)");
                 return;
             }
             switchView('calculatorView');
@@ -556,7 +591,7 @@
             switchView('loginView');
         }
 
-        // ตรวจสอบ Session เดิมตอนเปิดหน้าเว็บ
+        // ตรวจสอบ Auto Login หากมี Session อยู่เดิม
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = sessionStorage.getItem('dcsg_session_user');
             const savedPass = sessionStorage.getItem('dcsg_session_pass');
