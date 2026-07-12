@@ -5,22 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DCSG SYSTEM — Darin Collection</title>
     
+    <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Niramit:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+    <!-- ================= VIEW 1: AUTH & LOGIN / REGISTER VIEW ================= -->
     <div id="loginView" class="view-section active">
         <div class="auth-card">
-            <span class="brand-badge">DARIN COLLECTION</span>
+            <span class="brand-badge">👑 DARIN COLLECTION</span>
             <h1 class="auth-title">DCSG SYSTEM</h1>
             <p class="auth-subtitle">ระบบเทคโนโลยีคำนวณราคามวลรวมและจัดการสิทธิ์สาขา</p>
             
-            <div id="authForms">
+            <!-- Tab Switcher Menu -->
+            <div class="tab-menu">
+                <button class="tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">🔑 เข้าสู่ระบบ</button>
+                <button class="tab-btn" id="tabRegisterBtn" onclick="switchAuthTab('register')">📝 สมัครสมาชิก</button>
+            </div>
+
+            <!-- 1.1 LOGIN FORM -->
+            <div id="loginForm">
                 <div class="form-group">
                     <label>ชื่อผู้ใช้งาน (Username)</label>
                     <input type="text" id="loginUser" placeholder="ระบุ Username" autocomplete="off">
@@ -32,16 +42,63 @@
                 </div>
                 
                 <button class="btn-auth" onclick="triggerLiveStoreLogin()">🔒 เข้าสู่ระบบ</button>
-                <div class="login-error" id="loginErrorMsg"></div>
             </div>
+
+            <!-- 1.2 REGISTER FORM -->
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>แบรนด์ / ชื่อร้านค้า (Shop Name)</label>
+                    <input type="text" id="regShop" placeholder="เช่น Darin Collection" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>ชื่อแสดงผลพนักงาน / ผู้ใช้งาน</label>
+                    <input type="text" id="regDisplay" placeholder="เช่น คุณนก (สาขา 1)" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>กำหนด Username</label>
+                    <input type="text" id="regUser" placeholder="ภาษาอังกฤษหรือตัวเลข" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>กำหนด Password</label>
+                    <input type="password" id="regPass" placeholder="ตั้งรหัสผ่าน">
+                </div>
+
+                <div class="form-group">
+                    <label>ระดับสิทธิ์การใช้งาน</label>
+                    <select id="regRole">
+                        <option value="Staff">👤 พนักงานประจำสาขา (Staff)</option>
+                        <option value="Owner">👑 เจ้าของร้าน / ผู้จัดการ (Owner)</option>
+                    </select>
+                </div>
+
+                <button class="btn-auth" style="background:#3d6a45;" onclick="triggerLiveStoreSignup()">✨ ส่งข้อมูลลงทะเบียน</button>
+            </div>
+
+            <!-- 1.3 SUCCESS REGISTRATION VIEW -->
+            <div id="successView" class="success-view" style="display: none; padding: 20px 10px;">
+                <div style="font-size: 48px; color: #b38e6d; margin-bottom: 10px;">🎉</div>
+                <h3 style="color:#0a142f; margin:0 0 8px 0; font-family:'Niramit'; font-size:20px;">ส่งข้อมูลลงทะเบียนเรียบร้อยแล้ว</h3>
+                <p style="font-size:13px; color:#615043; line-height:1.5; margin-bottom:20px;">
+                    ระบบได้ส่งข้อมูลของคุณเข้าสู่ฐานข้อมูลเรียบร้อยแล้ว<br>
+                    <span style="color:#b38e6d; font-weight:700;">กรุณาแจ้งแอดมินหรือบอสเพื่อกดอนุมัติสิทธิ์ (Approved)</span> ก่อนเริ่มใช้งานครับ
+                </p>
+                <button class="btn-auth" onclick="backToLoginView()">🔙 กลับไปหน้าเข้าสู่ระบบ</button>
+            </div>
+
+            <!-- ERROR MSG & LOADING OVERLAY -->
+            <div class="login-error" id="loginErrorMsg"></div>
 
             <div id="authLoading" class="loading-overlay">
                 <i class="fa-solid fa-circle-notch fa-spin fa-2x" style="margin-bottom:12px;"></i>
-                <div id="loadingText">⏳ กำลังตรวจสอบสิทธิ์และเชื่อมต่อคลาวด์...</div>
+                <div id="loadingText">⏳ กำลังตรวจสอบและเชื่อมต่อระบบคลาวด์...</div>
             </div>
         </div>
     </div>
 
+    <!-- ================= VIEW 2: PORTAL LAUNCHER ================= -->
     <div id="portalView" class="view-section">
         <div class="portal-nav">
             <div class="portal-brand">👑 DCSG SYSTEM</div>
@@ -94,6 +151,7 @@
         </div>
     </div>
 
+    <!-- ================= VIEW 3: MAIN CALCULATOR & WORKSPACE ================= -->
     <div id="calculatorView" class="view-section">
         <button class="btn-back-portal" onclick="returnToPortal()"><i class="fa-solid fa-house"></i> กลับหน้าหลัก</button>
 
@@ -119,6 +177,7 @@
                 <button class="tab-nav-btn" id="btnMainClassicTab" onclick="switchMainTab('classicTab', this)">📑 เครื่องคำนวณคลาสสิก (ทอง/เงินแยกก้อน)</button>
             </div>
 
+            <!-- Tab Content 1: Calculator Workspace -->
             <div class="tab-content active" id="calcTab">
                 <div class="workspace-grid">
                     <div class="left-panel">
@@ -177,6 +236,7 @@
                         <button type="button" class="btn-add-item" onclick="pushItemToBill()">➕ เพิ่มชิ้นงานเข้าตั๋วบิลนี้</button>
                     </div>
 
+                    <!-- Right Panel: Bill Items -->
                     <div class="right-panel">
                         <div style="font-weight:700; font-size:15px; color:#4a3b32; margin-bottom:12px;">
                             📑 ตั๋วรายการรับซื้อสะสมในบิลนี้
@@ -211,6 +271,7 @@
                 </div>
             </div>
 
+            <!-- Tab Content 2: Dashboard Report -->
             <div class="tab-content" id="reportTab">
                 <div class="report-section">
                     <div class="filter-row">
@@ -263,6 +324,7 @@
                 </div>
             </div>
 
+            <!-- Tab Content 3: Classic Calculator -->
             <div class="tab-content" id="classicTab">
                 <div class="classic-scope">
                     <div class="tab-control-bar">
@@ -387,6 +449,7 @@
         </div>
     </div>
 
+    <!-- Modal for History Details -->
     <div id="ccDetailModal" class="classic-scope modal-overlay hidden-element">
         <div class="modal-box">
             <div class="modal-header">
@@ -417,6 +480,7 @@
         </div>
     </div>
 
+    <!-- Core App Logic -->
     <script src="js/app.js"></script>
 </body>
 </html>
