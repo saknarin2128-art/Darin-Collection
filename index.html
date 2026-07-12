@@ -7,366 +7,38 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=Niramit:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Niramit:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="css/style.css">
-
-    <style>
-        :root {
-            --bg-cream: #fdfbf7;
-            --navy-dark: #0a142f;
-            --navy-light: #162447;
-            --gold-amber: #d4af37;
-            --gold-light: #f3e5ab;
-            --text-main: #2b2b2b;
-            --text-muted: #8c8c8c;
-            --card-bg: #ffffff;
-            --border-color: #f0e6d2;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Anuphan', sans-serif;
-            background-color: var(--bg-cream);
-            color: var(--text-main);
-            min-height: 100vh;
-        }
-
-        /* 🔒 บังคับซ่อนหน้าจอที่ไม่ใช้งานอย่างเด็ดขาด */
-        .view-section {
-            display: none !important;
-            width: 100%;
-        }
-        .view-section.active {
-            display: block !important;
-        }
-
-        /* ---------------- VIEW 1: LOGIN ---------------- */
-        #loginView.active {
-            min-height: 100vh;
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-            background: radial-gradient(circle at center, #ffffff 0%, #f7f2e8 100%);
-        }
-
-        .login-box {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 420px;
-            padding: 40px 32px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(10, 20, 47, 0.08);
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
-
-        .brand-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            background: rgba(212, 175, 55, 0.15);
-            color: #b38e6d;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            margin-bottom: 12px;
-        }
-
-        .login-title {
-            font-family: 'Niramit', sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--navy-dark);
-            margin: 0 0 6px 0;
-        }
-
-        .login-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 28px;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--navy-dark);
-            margin-bottom: 6px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #e2d9cc;
-            border-radius: 10px;
-            font-family: 'Anuphan', sans-serif;
-            font-size: 14px;
-            box-sizing: border-box;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .form-control:focus {
-            border-color: var(--gold-amber);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: var(--navy-dark);
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            background: var(--navy-light);
-        }
-
-        .login-error {
-            color: #e53935;
-            font-size: 13px;
-            margin-top: 14px;
-            min-height: 18px;
-            font-weight: 500;
-        }
-
-        /* ---------------- VIEW 2: PORTAL ---------------- */
-        .portal-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            border-bottom: 1px solid var(--border-color);
-            background: #ffffff;
-        }
-
-        .portal-brand {
-            font-family: 'Niramit', sans-serif;
-            font-weight: 700;
-            font-size: 22px;
-            color: var(--navy-dark);
-        }
-
-        .portal-user-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .btn-portal-logout {
-            background: #fff0f0;
-            color: #d32f2f;
-            border: 1px solid #ffcdd2;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-portal-logout:hover {
-            background: #ffebee;
-        }
-
-        .portal-hero {
-            max-width: 1100px;
-            margin: 40px auto 20px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
-        .portal-hero h1 {
-            font-family: 'Niramit', sans-serif;
-            font-size: 38px;
-            font-weight: 700;
-            color: var(--navy-dark);
-            margin: 0 0 10px 0;
-        }
-
-        .portal-hero p {
-            font-size: 15px;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .portal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            max-width: 1100px;
-            margin: 30px auto 50px auto;
-            padding: 0 20px;
-        }
-
-        .portal-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 32px 24px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            text-align: center;
-            position: relative;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .portal-card:hover:not(.locked) {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(10, 20, 47, 0.08);
-        }
-
-        .card-icon-wrapper {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 20px auto;
-            border-radius: 50%;
-            background: rgba(212, 175, 55, 0.12);
-            color: var(--navy-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-        }
-
-        .portal-card h3 {
-            font-size: 20px;
-            margin: 0 0 8px 0;
-            color: var(--navy-dark);
-        }
-
-        .portal-card p {
-            font-size: 13.5px;
-            color: var(--text-muted);
-            margin: 0 0 24px 0;
-            line-height: 1.5;
-        }
-
-        .btn-card-launch {
-            background: var(--navy-dark);
-            color: #ffffff;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
-        }
-
-        .btn-card-launch:hover {
-            background: var(--gold-amber);
-        }
-
-        /* Locked Card Styling */
-        .portal-card.locked {
-            filter: grayscale(0.8);
-            opacity: 0.65;
-            background: #fbf9f5;
-        }
-
-        .lock-overlay {
-            display: none;
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: #e0e0e0;
-            color: #616161;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .portal-card.locked .lock-overlay {
-            display: inline-block;
-        }
-
-        .portal-card.locked .btn-card-launch {
-            background: #b0bec5;
-            cursor: not-allowed;
-        }
-
-        .trust-badges {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            font-size: 12.5px;
-            color: var(--text-muted);
-            margin-top: 20px;
-            padding-bottom: 40px;
-        }
-
-        /* ---------------- VIEW 3: GOLD CALCULATOR APP ---------------- */
-        #calculatorView {
-            position: relative;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .btn-back-portal {
-            position: fixed;
-            top: 18px;
-            right: 24px;
-            z-index: 99999;
-            background: var(--gold-amber);
-            color: #ffffff;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-            transition: background 0.2s;
-        }
-
-        .btn-back-portal:hover {
-            background: #b38e6d;
-        }
-    </style>
 </head>
 <body>
 
     <div id="loginView" class="view-section active">
-        <div class="login-box">
+        <div class="auth-card">
             <span class="brand-badge">DARIN COLLECTION</span>
-            <h1 class="login-title">DCSG SYSTEM</h1>
-            <p class="login-subtitle">กรุณาเข้าสู่ระบบเพื่อใช้งานเครื่องมือสาขา</p>
+            <h1 class="auth-title">DCSG SYSTEM</h1>
+            <p class="auth-subtitle">ระบบเทคโนโลยีคำนวณราคามวลรวมและจัดการสิทธิ์สาขา</p>
             
-            <div class="form-group">
-                <label>ชื่อผู้ใช้งาน (Username)</label>
-                <input type="text" id="inputUsername" class="form-control" placeholder="ระบุ Username" autocomplete="off">
+            <div id="authForms">
+                <div class="form-group">
+                    <label>ชื่อผู้ใช้งาน (Username)</label>
+                    <input type="text" id="loginUser" placeholder="ระบุ Username" autocomplete="off">
+                </div>
+                
+                <div class="form-group">
+                    <label>รหัสผ่าน (Password)</label>
+                    <input type="password" id="loginPass" placeholder="ระบุ Password" onkeydown="if(event.key==='Enter') triggerLiveStoreLogin()">
+                </div>
+                
+                <button class="btn-auth" onclick="triggerLiveStoreLogin()">🔒 เข้าสู่ระบบ</button>
+                <div class="login-error" id="loginErrorMsg"></div>
             </div>
-            
-            <div class="form-group">
-                <label>รหัสผ่าน (Password)</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="ระบุ Password" onkeydown="if(event.key==='Enter') triggerAppLogin()">
+
+            <div id="authLoading" class="loading-overlay">
+                <i class="fa-solid fa-circle-notch fa-spin fa-2x" style="margin-bottom:12px;"></i>
+                <div id="loadingText">⏳ กำลังตรวจสอบสิทธิ์และเชื่อมต่อคลาวด์...</div>
             </div>
-            
-            <button class="btn-submit" onclick="triggerAppLogin()">🔒 เข้าสู่ระบบ</button>
-            <div class="login-error" id="loginErrorMsg"></div>
         </div>
     </div>
 
@@ -374,8 +46,8 @@
         <div class="portal-nav">
             <div class="portal-brand">👑 DCSG SYSTEM</div>
             <div class="portal-user-info">
-                <span id="portalUserDisplayName" style="font-weight:600; font-size:14px; color: var(--navy-dark);">คุณนก ดาริน</span>
-                <button class="btn-portal-logout" onclick="triggerAppLogout()">🚪 ออกจากระบบ</button>
+                <span id="portalUserDisplayName" style="font-weight:600; font-size:14px;">กำลังโหลดชื่อผู้ใช้...</span>
+                <button class="btn-logout" onclick="triggerStoreLogout()">🚪 ออกจากระบบ</button>
             </div>
         </div>
 
@@ -424,8 +96,8 @@
 
     <div id="calculatorView" class="view-section">
         <button class="btn-back-portal" onclick="returnToPortal()"><i class="fa-solid fa-house"></i> กลับหน้าหลัก</button>
-        
-        <div id="appContainer">
+
+        <div class="main-dashboard" id="mainDashboard">
             <div class="dash-header">
                 <div>
                     <h1 id="displayShopTitle">กำลังดึงตราแบรนด์ร้านค้า...</h1>
@@ -437,259 +109,314 @@
                         <select id="calcBranchSelector" onchange="onBranchSelectorChange()" style="border:none; background:transparent; font-family:'Anuphan'; font-weight:600; font-size:13px; color:#615043; outline:none; cursor:pointer;"></select>
                     </div>
                     <div class="user-tag" id="displayRoleTag" style="background:#4a3b32; color:#fff;">👤 สิทธิ์: Staff</div>
+                    <button class="btn-logout" onclick="triggerStoreLogout()">🚪 ออกจากระบบ</button>
                 </div>
             </div>
 
-            <div class="nav-tabs" style="margin-top: 15px;">
-                <button class="nav-tab active" onclick="switchMainTab('tab-calculator', this)">🪙 เครื่องคำนวณราคา (เรทถอยสดจากบอส)</button>
-                <button class="nav-tab" onclick="switchMainTab('tab-dashboard', this)">📊 แดชบอร์ดสรุปยอดขายแยกประเภท</button>
-                <button class="nav-tab" onclick="switchMainTab('tab-classic', this)">📑 เครื่องคำนวณคลาสสิก (ทอง/เงินแยกก้อน)</button>
+            <div class="tabs-nav">
+                <button class="tab-nav-btn active" id="btnMainCalcTab" onclick="switchMainTab('calcTab', this)">🪙 เครื่องคำนวณราคา (เรทถอยสดจากบอส)</button>
+                <button class="tab-nav-btn" id="btnMainReportTab" onclick="switchMainTab('reportTab', this)">📊 แดชบอร์ดสรุปยอดขายแยกประเภท</button>
+                <button class="tab-nav-btn" id="btnMainClassicTab" onclick="switchMainTab('classicTab', this)">📑 เครื่องคำนวณคลาสสิก (ทอง/เงินแยกก้อน)</button>
             </div>
 
-            <div class="tab-content active" id="tab-calculator">
-                <div class="calc-layout">
-                    <div class="calc-card">
+            <div class="tab-content active" id="calcTab">
+                <div class="workspace-grid">
+                    <div class="left-panel">
                         <div class="form-group">
-                            <label>ราคาทองอ้างอิงสำหรับคำนวณ (สามารถคีย์ตั้งค่าได้เองอิสระ)</label>
-                            <input type="number" id="spotPrice" value="44500" oninput="calculatePrice()">
+                            <label id="basePriceLabel">ราคาทองอ้างอิงสำหรับคำนวณ (สามารถคีย์ตั้งค่าได้เองอิสระ)</label>
+                            <input type="number" id="basePrice" value="44500">
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="form-grid">
                             <div class="form-group">
                                 <label>ประเภทสินค้าหลัก</label>
-                                <select id="itemType" onchange="onItemTypeChange()">
-                                    <option value="gold_bar">ทองคำแท่ง</option>
-                                    <option value="gold_jewelry">ทองรูปพรรณ</option>
-                                    <option value="gold_melt">ทองหลอม</option>
-                                    <option value="silver_bar">เงินแท่ง</option>
-                                    <option value="silver_melt">เงินหลอม</option>
+                                <select id="goldType" onchange="onCategoryTypeChange('gold')">
+                                    <option value="ทองคำแท่ง">ทองคำแท่ง</option>
+                                    <option value="ทองรูปพรรณ">ทองรูปพรรณ</option>
+                                    <option value="ทองหลอม">ทองหลอม</option>
+                                    <option value="ไม่ใช่ทองคำ">ไม่ใช่ทองคำ (สลับแร่เงิน)</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>ประเภทแร่เงิน</label>
-                                <select id="subType" onchange="calculatePrice()">
-                                    <option value="">-- คำนวณทองคำ --</option>
+                                <select id="silverType" onchange="onCategoryTypeChange('silver')">
+                                    <option value="ไม่ใช่แร่เงิน">-- คำนวณทองคำ --</option>
+                                    <option value="เงินแท่ง">เงินแท่ง</option>
+                                    <option value="เงินหลอม">เงินหลอม</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label>น้ำหนักชิ้นงาน (กรัม)</label>
-                            <input type="number" id="weightGram" placeholder="0.00" step="any" oninput="calculatePrice()">
-                            <div class="quick-weights" style="margin-top: 8px;">
-                                <button class="btn-chip" onclick="setQuickWeight(3.81)">ครึ่งสลึง</button>
-                                <button class="btn-chip" onclick="setQuickWeight(3.811)">1 สลึง</button>
-                                <button class="btn-chip" onclick="setQuickWeight(15.24)">1 บาท</button>
+                            <input type="number" id="weightGrams" placeholder="0.00" step="any">
+                            <div class="preset-container">
+                                <button type="button" class="btn-preset" onclick="setWeightShortcut(3.811)">1 สลึง (3.811g)</button>
+                                <button type="button" class="btn-preset" onclick="setWeightShortcut(7.622)">2 สลึง (7.622g)</button>
+                                <button type="button" class="btn-preset" onclick="setWeightShortcut(15.24)">1 บาท (15.24g)</button>
+                                <button type="button" class="btn-preset" onclick="setWeightShortcut(30.48)">2 บาท (30.48g)</button>
+                                <button type="button" class="btn-preset" onclick="setWeightShortcut(76.20)">5 บาท (76.20g)</button>
+                                <button type="button" class="btn-preset" onclick="setWeightShortcut(152.40)">10 บาท (152.40g)</button>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="meltedPurityGroup">
                             <label>เปอร์เซ็นต์ความบริสุทธิ์ (%)</label>
-                            <input type="number" id="purity" value="96.5" step="any" oninput="calculatePrice()">
+                            <input type="number" id="meltedPurity" value="96.5" step="any">
                         </div>
 
-                        <div class="form-group" style="margin-bottom:0;">
+                        <div class="form-group">
                             <label>ราคาคำนวณสุทธิต่อกรัมชิ้นนี้</label>
-                            <input type="text" id="pricePerGramDisplay" readonly style="background:#f5ede6; font-family:'DM Mono'; font-weight:700;" value="0.00 บาท/ก.">
+                            <input type="text" id="pricePerGram" readonly style="background:#f5ede6; font-family:'DM Mono'; font-weight:700; color:#b38e6d;" value="0.00 บาท/กรัม">
                         </div>
+
+                        <div class="cheat-sheet-box" id="cheatSheetContent">
+                            💡 กรอกข้อมูลตัวเลขน้ำหนักและประเภททองคำเพื่อเริ่มคำนวณราคา
+                        </div>
+
+                        <button type="button" class="btn-add-item" onclick="pushItemToBill()">➕ เพิ่มชิ้นงานเข้าตั๋วบิลนี้</button>
                     </div>
 
-                    <div class="calc-card">
-                        <div style="font-weight:700; font-size:15px; color:#4a3b32; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                    <div class="right-panel">
+                        <div style="font-weight:700; font-size:15px; color:#4a3b32; margin-bottom:12px;">
                             📑 ตั๋วรายการรับซื้อสะสมในบิลนี้
                         </div>
-                        <div id="ticketItemsList" style="min-height: 120px;"></div>
 
-                        <div class="grand-total-box" style="margin-top:16px; background:#221d19; color:#fff; padding:20px; border-radius:14px; text-align:center;">
+                        <div class="table-container">
+                            <table class="item-table">
+                                <thead>
+                                    <tr>
+                                        <th>รายการ</th>
+                                        <th>น้ำหนัก (ก.)</th>
+                                        <th>ทุนรวม</th>
+                                        <th>การกระทำ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemTableBody">
+                                    <tr><td colspan="4" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="result-box">
                             <div style="font-size:13px; color:#a39284;">ราคารับซื้อสุทธิรวมทั้งสิ้น</div>
-                            <div id="grandTotalDisplay" style="font-size:32px; font-weight:700; color:#e0c9b1; font-family:'DM Mono'; margin:4px 0;">0 บาท</div>
+                            <span id="totalResult">0.00 บาท</span>
                         </div>
 
-                        <div style="display:flex; gap:10px; margin-top:14px;">
-                            <button id="btnSaveToCloud" onclick="saveCurrentBillToCloud()" style="flex:2; background:#3d6a45; color:#fff; border:none; padding:14px; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer;">💾 บันทึกตั๋วบิลขึ้นคลาวด์</button>
+                        <div class="action-container">
+                            <button type="button" class="btn-action btn-copy" onclick="alert('คัดลอกรายการสำรองเรียบร้อย')">📋 คัดลอก</button>
+                            <button type="button" class="btn-action btn-send-sheet" onclick="commitBillToCloudAndDashboard()">☁️ บันทึกเข้าชีทและแดชบอร์ด</button>
                         </div>
-                        <div id="tierDeductionNotice" style="font-size:12px; color:#8c7867; margin-top:10px; text-align:center;"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="tab-content" id="tab-dashboard">
-                <div class="calc-card">
-                    <h2>📊 รายงานสรุปยอดซื้อขายย้อนหลัง</h2>
-                    <div id="dashboardTxTable">กำลังโหลดข้อมูลรายการ...</div>
+            <div class="tab-content" id="reportTab">
+                <div class="report-section">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>📍 กรองตามสาขา:</label>
+                            <select id="dashboardBranchFilter" onchange="rebuildLargeDashboardTableHTML()">
+                                <option value="all">ทุกสาขา</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>📅 ช่วงเวลา:</label>
+                            <select id="dashboardDateFilter" onchange="rebuildLargeDashboardTableHTML()">
+                                <option value="all">ทั้งหมด</option>
+                                <option value="today">วันนี้</option>
+                                <option value="month">เดือนนี้</option>
+                                <option value="year">ปีนี้</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>🥇 ราคาทองสมาคมอ้างอิงคำนวณกำไร:</label>
+                            <input type="number" id="dashboardAssociationPrice" value="44500" style="width:120px;" oninput="rebuildLargeDashboardTableHTML()">
+                        </div>
+                        <div class="filter-group">
+                            <label>🥈 ราคาเงินอ้างอิง/กรัม:</label>
+                            <input type="number" id="dashboardSilverPriceInput" value="70" style="width:90px;" oninput="rebuildLargeDashboardTableHTML()">
+                        </div>
+                    </div>
+
+                    <div class="dashboard-table-wrapper">
+                        <table class="dash-large-table">
+                            <thead>
+                                <tr>
+                                    <th>วันที่/เวลา</th>
+                                    <th>สาขา</th>
+                                    <th>เลขตั๋ว</th>
+                                    <th>ประเภท</th>
+                                    <th>น้ำหนัก (ก.)</th>
+                                    <th>% เนื้อ</th>
+                                    <th>ทุนรวม (บาท)</th>
+                                    <th>สถานะ</th>
+                                    <th>ทุน/บาททอง</th>
+                                    <th>คาดการณ์กำไร/ขาดทุน</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboardTableBody">
+                                <tr><td colspan="10" style="text-align:center; color:#a39284; padding:20px;">⏳ กำลังโหลดข้อมูลธุรกรรมจากคลาวด์...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div class="tab-content" id="tab-classic">
-                <div class="calc-card">
-                    <h2>📑 เครื่องคำนวณคลาสสิก</h2>
-                    <p style="color:#a39284;">โหมดคำนวณด่วนรายชิ้นงานแยกตามประเภท</p>
+            <div class="tab-content" id="classicTab">
+                <div class="classic-scope">
+                    <div class="tab-control-bar">
+                        <button class="cc-tab-btn active-tab" id="ccTabCurrentBtn" onclick="ccSwitchTab('CURRENT')">🧮 ตารางคำนวณปัจจุบัน</button>
+                        <button class="cc-tab-btn" id="ccTabHistoryBtn" onclick="ccSwitchTab('HISTORY')">📜 ประวัติการปิดยอดวันนี้</button>
+                    </div>
+
+                    <div id="ccPaneCurrent" class="main-wrapper">
+                        <div class="left-container">
+                            <div class="calculator-container">
+                                <div class="calc-mode-container">
+                                    <button class="mode-btn active-gold" id="ccGoldModeBtn" onclick="ccSwitchMode('GOLD')">🟡 คำนวณทองคำ</button>
+                                    <button class="mode-btn" id="ccSilverModeBtn" onclick="ccSwitchMode('SILVER')">⚪ คำนวณแร่เงิน</button>
+                                </div>
+
+                                <div class="cc-row">
+                                    <div class="cc-form-group">
+                                        <label id="ccLblRefPrice">1. ราคาอ้างอิงทอง (บาทละ)</label>
+                                        <input type="number" id="ccRefPrice" value="44500">
+                                    </div>
+                                    <div class="cc-form-group" id="ccExtraPriceFormGroup">
+                                        <label>2. บวกเพิ่มพิเศษ (บาท)</label>
+                                        <input type="number" id="ccExtraPrice" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <div class="cc-row">
+                                    <div class="cc-form-group">
+                                        <label>3. น้ำหนักชิ้นงาน (กรัม)</label>
+                                        <input type="number" id="ccWeight" placeholder="0.000" step="any">
+                                    </div>
+                                    <div class="cc-form-group">
+                                        <label>4. เปอร์เซ็นต์ (%)</label>
+                                        <input type="number" id="ccPercent" placeholder="00.00" step="any">
+                                    </div>
+                                </div>
+
+                                <div class="cc-form-group" style="margin-bottom: 12px;">
+                                    <label>ราคาคำนวณได้ต่อกรัม</label>
+                                    <input type="text" id="ccPricePerGram" readonly style="background:#f9f9f9; color:#a88463; font-weight:bold;" value="รอดำเนินการคำนวณ...">
+                                </div>
+
+                                <div class="result-button">
+                                    <div style="font-size:12px; opacity:0.9;">ราคารับซื้อสุทธิชิ้นนี้</div>
+                                    <div class="result-amount" id="ccTotalResult">0 บาท</div>
+                                </div>
+
+                                <button class="add-btn" onclick="ccAddRecordToTable()">➕ เพิ่มรายการลงตารางด้านขวา</button>
+                            </div>
+
+                            <div class="pure-gold-container" id="ccPureGoldBoxContainer">
+                                <div class="pure-box-section">
+                                    <div class="pure-gold-title" id="ccLblPureGoldBox">✨ น้ำหนักทองเพียว 99.99% รวมทั้งหมด</div>
+                                    <div class="pure-gold-value" id="ccTotalPureGoldDisplay">0.000 กรัม</div>
+                                </div>
+                                <div class="pure-box-section hidden-element" id="ccLeftRefineBoxSection">
+                                    <div class="pure-gold-title refine-title">💸 ค่าบริการสกัดแร่เงินรวม</div>
+                                    <div class="pure-gold-value refine-value" id="ccTotalRefineDisplay">0.00 บาท</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cc-table-container">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <h3 id="ccLblTableTitle">📋 รายการบันทึกการซื้อขาย (ทองคำ)</h3>
+                                <div>
+                                    <button class="save-to-history-btn" onclick="ccSaveCurrentToHistory()">💾 ปิดยอดบันทึกประวัติ</button>
+                                    <button class="clear-btn" onclick="ccClearTable()">ล้างตาราง</button>
+                                </div>
+                            </div>
+
+                            <div class="table-scroll-wrapper">
+                                <table class="gold-table">
+                                    <thead>
+                                        <tr>
+                                            <th>รายการ</th>
+                                            <th>1. น้ำหนัก (กรัม)</th>
+                                            <th>2. เปอร์เซ็นต์</th>
+                                            <th>3. ราคา/กรัม</th>
+                                            <th id="ccThPureGold">4. ทองเพียว (กรัม)</th>
+                                            <th>5. ยอดคำนวณสุทธิ</th>
+                                            <th>6. ยอดปัดเศษจ่ายจริง</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ccTableBody"></tbody>
+                                    <tfoot>
+                                        <tr class="summary-row">
+                                            <td style="text-align:left; padding-left:15px;">ยอดรวม</td>
+                                            <td id="ccTotalWeightSum">0.000 กรัม</td>
+                                            <td id="ccAveragePercentSum">0.000%</td>
+                                            <td id="ccAvgPricePerGramSum">0.0 บาท</td>
+                                            <td id="ccTotalPureGoldSum">0.000 กรัม</td>
+                                            <td id="ccTotalAmountSum">0.000 บาท</td>
+                                            <td id="ccTotalPaymentSum" class="pay-column">0 บาท</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="silver-net-pay-container hidden-element" id="ccSilverNetPayBox">
+                                <div class="silver-net-title">💵 ยอดจ่ายสุทธิหลังหักค่าสกัดแร่เงิน</div>
+                                <div class="silver-net-value" id="ccSilverNetPayDisplay">0.00 บาท</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ccPaneHistory" class="main-wrapper hidden-element">
+                        <div class="cc-table-container" style="width:100%;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3>📜 ประวัติการรับซื้อที่ปิดยอดแล้ววันนี้</h3>
+                                <button class="clear-btn" onclick="ccClearAllHistory()">ล้างประวัติทั้งหมด</button>
+                            </div>
+                            <div class="history-list" id="ccHistoryContainer"></div>
+                            <div class="history-grand-total">
+                                <span>สรุปยอดรวมสุทธิประวัติวันนี้:</span>
+                                <span id="ccGrandTotalDisplay">ทองคำ: 0 บาท | แร่เงิน: 0 บาท</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="js/config.js"></script>
-    <script src="js/state.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/calculator.js"></script>
-    <script src="js/dashboard.js"></script>
+    <div id="ccDetailModal" class="classic-scope modal-overlay hidden-element">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title" id="ccModalTitleText">🔎 รายละเอียดบิลรับซื้อ</div>
+                <button class="modal-close-x" onclick="ccCloseModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="ccModalMetaInfo" style="margin-bottom:15px; font-size:14px; color:#555;"></div>
+                <div class="table-scroll-wrapper">
+                    <table class="gold-table">
+                        <thead>
+                            <tr>
+                                <th>รายการ</th>
+                                <th>น้ำหนัก (กรัม)</th>
+                                <th>เปอร์เซ็นต์</th>
+                                <th>ราคา/กรัม</th>
+                                <th>เนื้อเพียว (กรัม)</th>
+                                <th>ยอดจ่ายจริง</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ccModalTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-close-modal" onclick="ccCloseModal()">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
-
-    <script>
-        const URL_VALUATION = "https://darintrade-7vp8ee75.manus.space"; 
-        const URL_PAWN = "https://darintrade-7vp8ee75.manus.space"; 
-        const HARDCODED_CLOUD_URL = "https://script.google.com/macros/s/AKfycbyRxwiLp4JYaWkl2oR1omTycfPm3WIsBBfDbw91Ycbdeqi9AC2KGd5Xg0IEO6z2LevM/exec";
-
-        let userPermissions = { val: "No", pawn: "No", calc: "No" };
-        let cachedLoginData = null;
-
-        function getBrowserDeviceToken() {
-            let token = localStorage.getItem('dcsg_device_token');
-            if (!token) {
-                token = 'DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-                localStorage.setItem('dcsg_device_token', token);
-            }
-            return token;
-        }
-
-        // 🔒 สลับหน้าจอแบบเด็ดขาด ป้องกันหน้าจอซ้อนทับ
-        function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(v => {
-                v.classList.remove('active');
-                v.style.setProperty('display', 'none', 'important');
-            });
-            
-            const target = document.getElementById(viewId);
-            target.classList.add('active');
-            if (viewId === 'loginView') {
-                target.style.setProperty('display', 'flex', 'important');
-            } else {
-                target.style.setProperty('display', 'block', 'important');
-            }
-        }
-
-        function triggerAppLogin() {
-            const user = document.getElementById('inputUsername').value.trim();
-            const pass = document.getElementById('inputPassword').value.trim();
-            const token = getBrowserDeviceToken();
-            const errorEl = document.getElementById('loginErrorMsg');
-
-            if (!user || !pass) {
-                errorEl.innerText = "⚠️ กรุณากรอก Username และ Password";
-                return;
-            }
-
-            errorEl.innerText = "⏳ กำลังตรวจสอบสิทธิ์...";
-
-            const targetUrl = (typeof CONFIG !== 'undefined' && CONFIG.CLOUD_URL) 
-                ? CONFIG.CLOUD_URL 
-                : HARDCODED_CLOUD_URL;
-
-            fetch(`${targetUrl}?action=loginCheck&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&token=${encodeURIComponent(token)}&_ts=${Date.now()}`, {
-                method: 'GET',
-                redirect: 'follow'
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    errorEl.innerText = "";
-                    cachedLoginData = data;
-
-                    sessionStorage.setItem('dcsg_session_user', user);
-                    sessionStorage.setItem('dcsg_session_pass', pass);
-                    sessionStorage.setItem('dcsg_session_data', JSON.stringify(data));
-
-                    userPermissions = data.permissions || { val: "Yes", pawn: "Yes", calc: "Yes" };
-                    
-                    document.getElementById('portalUserDisplayName').innerText = `${data.displayName || user} (${data.shop || ''})`;
-
-                    applyPermissionsUI();
-                    switchView('portalView');
-
-                    // เริ่มต้นสคริปต์แอปคำนวณทองคำเดิม
-                    if (typeof initializeAppSession === 'function') {
-                        initializeAppSession(data, user, pass, token);
-                    }
-                } else {
-                    errorEl.innerText = "❌ " + (data.message || "เข้าสู่ระบบไม่สำเร็จ");
-                }
-            })
-            .catch(err => {
-                console.error("Login error:", err);
-                errorEl.innerText = "❌ ปัญหาการเชื่อมต่ออินเทอร์เน็ต หรือเซิร์ฟเวอร์ตอบรับผิดพลาด";
-            });
-        }
-
-        function applyPermissionsUI() {
-            const cardVal = document.getElementById('cardValuation');
-            if (userPermissions.val === "Yes") cardVal.classList.remove('locked');
-            else cardVal.classList.add('locked');
-
-            const cardPawn = document.getElementById('cardPawn');
-            if (userPermissions.pawn === "Yes") cardPawn.classList.remove('locked');
-            else cardPawn.classList.add('locked');
-
-            const cardCalc = document.getElementById('cardCalc');
-            if (userPermissions.calc === "Yes") cardCalc.classList.remove('locked');
-            else cardCalc.classList.add('locked');
-        }
-
-        function launchValuation() {
-            if (userPermissions.val !== "Yes") {
-                alert("🚫 บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบประเมินราคา (โปรดติดต่อบอสแอดมิน)");
-                return;
-            }
-            window.open(URL_VALUATION, '_blank');
-        }
-
-        function launchPawn() {
-            if (userPermissions.pawn !== "Yes") {
-                alert("🚫 บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบรับฝากจำนำ (โปรดติดต่อบอสแอดมิน)");
-                return;
-            }
-            window.open(URL_PAWN, '_blank');
-        }
-
-        function launchCalculator() {
-            if (userPermissions.calc !== "Yes") {
-                alert("🚫 บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบคำนวณราคาทองคำ (โปรดติดต่อบอสแอดมิน)");
-                return;
-            }
-            switchView('calculatorView');
-        }
-
-        function returnToPortal() {
-            switchView('portalView');
-        }
-
-        function switchMainTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function triggerAppLogout() {
-            sessionStorage.clear();
-            cachedLoginData = null;
-            document.getElementById('inputUsername').value = "";
-            document.getElementById('inputPassword').value = "";
-            document.getElementById('loginErrorMsg').innerText = "";
-            switchView('loginView');
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedUser = sessionStorage.getItem('dcsg_session_user');
-            const savedPass = sessionStorage.getItem('dcsg_session_pass');
-            if (savedUser && savedPass) {
-                document.getElementById('inputUsername').value = savedUser;
-                document.getElementById('inputPassword').value = savedPass;
-                triggerAppLogin();
-            } else {
-                switchView('loginView');
-            }
-        });
-    </script>
 </body>
 </html>
