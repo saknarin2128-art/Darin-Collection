@@ -34,7 +34,7 @@ body {
     background: #ffffff;
     width: 100%;
     max-width: 440px;
-    padding: 45px 35px;
+    padding: 40px 32px;
     border-radius: 28px;
     box-shadow: 0 25px 60px rgba(74, 59, 50, 0.08);
     border: 1px solid rgba(235, 220, 208, 0.8);
@@ -51,7 +51,7 @@ body {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .auth-title {
@@ -64,9 +64,35 @@ body {
 }
 
 .auth-subtitle {
-    font-size: 12.5px;
+    font-size: 12px;
     color: #a39284;
-    margin: 4px 0 28px 0;
+    margin: 4px 0 20px 0;
+}
+
+/* Tab Switcher Menu */
+.tab-menu {
+    display: flex;
+    border-bottom: 2px solid #f5ede6;
+    margin-bottom: 22px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #a39284;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: all 0.2s;
+    font-family: 'Anuphan', sans-serif;
+}
+
+.tab-btn.active {
+    color: #b38e6d;
+    border-bottom: 2px solid #b38e6d;
+    margin-bottom: -2px;
 }
 
 .form-group {
@@ -112,6 +138,7 @@ body {
     cursor: pointer;
     margin-top: 10px;
     transition: background 0.2s;
+    font-family: 'Anuphan', sans-serif;
 }
 
 .btn-auth:hover {
