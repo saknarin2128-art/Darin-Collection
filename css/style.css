@@ -54,19 +54,26 @@ body {
     margin-bottom: 12px;
 }
 
+/* 💎 อัปเกรด STYLE 2: กรมท่าขอบเงินโครเมียม แบบหนาพิเศษ */
 .auth-title {
     font-family: 'Niramit', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: #0a142f;
+    font-size: 34px; /* ปรับให้ใหญ่ขึ้นเล็กน้อยเพื่อโชว์ความหรูหรา */
+    font-weight: 800; /* หนาพิเศษ (Extra Bold) */
+    color: #0A142F; /* สีกรมท่าลึก (Midnight Obsidian) */
     margin: 0;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em; /* เพิ่มช่องไฟไม่ให้เส้นขอบเบียดกัน */
+    
+    /* เทคนิคเส้นขอบเงินและเงาซ้อนมิติ */
+    -webkit-text-stroke: 2px #E2E8F0; /* ขอบเงินโครเมียมที่หนาขึ้น */
+    text-shadow: 
+        0px 4px 8px rgba(10, 20, 47, 0.25),
+        0px 10px 20px rgba(10, 20, 47, 0.15); /* มิติเงาที่ลึกขึ้นให้ตัวหนังสือเด้งออกมา */
 }
 
 .auth-subtitle {
     font-size: 12px;
     color: #a39284;
-    margin: 4px 0 20px 0;
+    margin: 10px 0 20px 0;
 }
 
 /* Tab Switcher Menu */
