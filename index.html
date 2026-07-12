@@ -38,19 +38,19 @@
             min-height: 100vh;
         }
 
-        /* Control display of single page views */
+        /* 🔒 บังคับซ่อนหน้าจอที่ไม่ใช้งานอย่างเด็ดขาด */
         .view-section {
-            display: none;
+            display: none !important;
             width: 100%;
         }
         .view-section.active {
-            display: block;
+            display: block !important;
         }
 
         /* ---------------- VIEW 1: LOGIN ---------------- */
-        #loginView {
+        #loginView.active {
             min-height: 100vh;
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -329,17 +329,17 @@
         .btn-back-portal {
             position: fixed;
             top: 14px;
-            right: 180px;
-            z-index: 999;
+            right: 20px;
+            z-index: 99999;
             background: var(--gold-amber);
             color: #ffffff;
             border: none;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 20px;
-            font-size: 12.5px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
             transition: background 0.2s;
         }
 
@@ -459,14 +459,12 @@
 
     <!-- Portal Integration Engine -->
     <script>
-        // ลิงก์ระบบภายนอก (ประเมินราคา และ ฝากจำนำ)
         const URL_VALUATION = "https://darintrade-7vp8ee75.manus.space"; 
         const URL_PAWN = "https://darintrade-7vp8ee75.manus.space"; 
-
-        // ลิงก์สำรอง Google Apps Script สำหรับการเข้าถึง Real-time
         const HARDCODED_CLOUD_URL = "https://script.google.com/macros/s/AKfycbyRxwiLp4JYaWkl2oR1omTycfPm3WIsBBfDbw91Ycbdeqi9AC2KGd5Xg0IEO6z2LevM/exec";
 
         let userPermissions = { val: "No", pawn: "No", calc: "No" };
+        let cachedLoginData = null;
 
         function getBrowserDeviceToken() {
             let token = localStorage.getItem('dcsg_device_token');
@@ -477,9 +475,20 @@
             return token;
         }
 
+        // 🔒 ฟังก์ชันสลับการมองเห็นอย่างสมบูรณ์ ไม่ให้หน้าจอซ้อนทับกัน
         function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            document.querySelectorAll('.view-section').forEach(v => {
+                v.classList.remove('active');
+                v.style.setProperty('display', 'none', 'important');
+            });
+            
+            const target = document.getElementById(viewId);
+            target.classList.add('active');
+            if (viewId === 'loginView') {
+                target.style.setProperty('display', 'flex', 'important');
+            } else {
+                target.style.setProperty('display', 'block', 'important');
+            }
         }
 
         function triggerAppLogin() {
@@ -495,7 +504,6 @@
 
             errorEl.innerText = "⏳ กำลังตรวจสอบสิทธิ์...";
 
-            // ตรวจสอบ URL หลังบ้าน
             const targetUrl = (typeof CONFIG !== 'undefined' && CONFIG.CLOUD_URL) 
                 ? CONFIG.CLOUD_URL 
                 : HARDCODED_CLOUD_URL;
@@ -508,26 +516,18 @@
             .then(data => {
                 if (data.success) {
                     errorEl.innerText = "";
-                    // บันทึก Session การใช้งาน
+                    cachedLoginData = data;
+
                     sessionStorage.setItem('dcsg_session_user', user);
                     sessionStorage.setItem('dcsg_session_pass', pass);
                     sessionStorage.setItem('dcsg_session_data', JSON.stringify(data));
 
                     userPermissions = data.permissions || { val: "Yes", pawn: "Yes", calc: "Yes" };
                     
-                    // แสดงชื่อผู้ใช้และชื่อร้าน
                     document.getElementById('portalUserDisplayName').innerText = `${data.displayName || user} (${data.shop || ''})`;
 
-                    // อัปเดตสถานะปุ่ม Portal ตามสิทธิ์
                     applyPermissionsUI();
-
-                    // สลับไปหน้า Portal Launcher
                     switchView('portalView');
-
-                    // เริ่มต้นสคริปต์แอปคำนวณทองคำเดิม
-                    if (typeof initializeAppSession === 'function') {
-                        initializeAppSession(data, user, pass, token);
-                    }
                 } else {
                     errorEl.innerText = "❌ " + (data.message || "เข้าสู่ระบบไม่สำเร็จ");
                 }
@@ -539,17 +539,14 @@
         }
 
         function applyPermissionsUI() {
-            // 1. Valuation System
             const cardVal = document.getElementById('cardValuation');
             if (userPermissions.val === "Yes") cardVal.classList.remove('locked');
             else cardVal.classList.add('locked');
 
-            // 2. Pawn System
             const cardPawn = document.getElementById('cardPawn');
             if (userPermissions.pawn === "Yes") cardPawn.classList.remove('locked');
             else cardPawn.classList.add('locked');
 
-            // 3. Calculator System
             const cardCalc = document.getElementById('cardCalc');
             if (userPermissions.calc === "Yes") cardCalc.classList.remove('locked');
             else cardCalc.classList.add('locked');
@@ -571,12 +568,27 @@
             window.open(URL_PAWN, '_blank');
         }
 
+        // 🪙 ฟังก์ชันดึงระบบคำนวณทองกลับมาทำงานทันที
         function launchCalculator() {
             if (userPermissions.calc !== "Yes") {
                 alert("🚫 บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบคำนวณราคาทองคำ (โปรดติดต่อบอสแอดมิน)");
                 return;
             }
+            
             switchView('calculatorView');
+
+            // เรียกใช้สคริปต์การเรนเดอร์ของแอปคำนวณเดิม
+            const user = sessionStorage.getItem('dcsg_session_user');
+            const pass = sessionStorage.getItem('dcsg_session_pass');
+            const token = getBrowserDeviceToken();
+
+            if (typeof renderAppUI === 'function') {
+                renderAppUI();
+            } else if (typeof initializeAppSession === 'function' && cachedLoginData) {
+                initializeAppSession(cachedLoginData, user, pass, token);
+            } else if (typeof initApp === 'function') {
+                initApp();
+            }
         }
 
         function returnToPortal() {
@@ -585,13 +597,13 @@
 
         function triggerAppLogout() {
             sessionStorage.clear();
+            cachedLoginData = null;
             document.getElementById('inputUsername').value = "";
             document.getElementById('inputPassword').value = "";
             document.getElementById('loginErrorMsg').innerText = "";
             switchView('loginView');
         }
 
-        // ตรวจสอบ Auto Login หากมี Session อยู่เดิม
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = sessionStorage.getItem('dcsg_session_user');
             const savedPass = sessionStorage.getItem('dcsg_session_pass');
@@ -599,6 +611,8 @@
                 document.getElementById('inputUsername').value = savedUser;
                 document.getElementById('inputPassword').value = savedPass;
                 triggerAppLogin();
+            } else {
+                switchView('loginView');
             }
         });
     </script>
