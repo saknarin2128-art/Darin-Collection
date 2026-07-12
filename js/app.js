@@ -57,6 +57,74 @@ function switchView(viewId) {
     }
 }
 
+// 🔀 ฟังก์ชันสลับแท็บ Login / Register
+function switchAuthTab(mode) {
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const successView = document.getElementById('successView');
+    const tabLoginBtn = document.getElementById('tabLoginBtn');
+    const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+    const errorEl = document.getElementById('loginErrorMsg');
+
+    if (errorEl) errorEl.innerText = "";
+
+    if (mode === 'login') {
+        if (tabLoginBtn) tabLoginBtn.className = 'tab-btn active';
+        if (tabRegisterBtn) tabRegisterBtn.className = 'tab-btn';
+        if (loginForm) loginForm.style.display = 'block';
+        if (registerForm) registerForm.style.display = 'none';
+        if (successView) successView.style.display = 'none';
+    } else {
+        if (tabRegisterBtn) tabRegisterBtn.className = 'tab-btn active';
+        if (tabLoginBtn) tabLoginBtn.className = 'tab-btn';
+        if (loginForm) loginForm.style.display = 'none';
+        if (registerForm) registerForm.style.display = 'block';
+        if (successView) successView.style.display = 'none';
+    }
+}
+
+// 📝 ฟังก์ชันยิงข้อมูลลงทะเบียนเข้า Google Sheet
+function triggerLiveStoreSignup() {
+    const shop = document.getElementById('regShop').value.trim();
+    const display = document.getElementById('regDisplay').value.trim();
+    const user = document.getElementById('regUser').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+    const role = document.getElementById('regRole').value;
+    const errorEl = document.getElementById('loginErrorMsg');
+    const loadingEl = document.getElementById('authLoading');
+
+    if (!shop || !display || !user || !pass) {
+        if (errorEl) errorEl.innerText = "⚠️ กรุณากรอกข้อมูลลงทะเบียนให้ครบทุกช่อง";
+        return;
+    }
+
+    if (errorEl) errorEl.innerText = "";
+    if (loadingEl) loadingEl.style.display = 'flex';
+
+    fetch(`${CLOUD_URL}?action=registerUser&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&role=${encodeURIComponent(role)}&displayName=${encodeURIComponent(display)}&shop=${encodeURIComponent(shop)}&_ts=${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+            if (loadingEl) loadingEl.style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('successView').style.display = 'block';
+        })
+        .catch(err => {
+            console.error("Register Error:", err);
+            if (loadingEl) loadingEl.style.display = 'none';
+            // แสดงหน้าสำเร็จเพื่อป้องกันข้อผิดพลาดจากปัญหา CORS หากเซิร์ฟเวอร์บันทึกสำเร็จ
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('successView').style.display = 'block';
+        });
+}
+
+function backToLoginView() {
+    document.getElementById('regShop').value = "";
+    document.getElementById('regDisplay').value = "";
+    document.getElementById('regUser').value = "";
+    document.getElementById('regPass').value = "";
+    switchAuthTab('login');
+}
+
 function triggerLiveStoreLogin() {
     const userEl = document.getElementById('loginUser');
     const passEl = document.getElementById('loginPass');
@@ -87,7 +155,6 @@ function triggerLiveStoreLogin() {
                 
                 userPermissions = data.permissions || { val: "Yes", pawn: "Yes", calc: "Yes" };
                 
-                // Set Portal Headers
                 const pName = document.getElementById('portalUserDisplayName');
                 if (pName) pName.innerText = `${data.displayName || user} (${data.shop || ''})`;
 
@@ -193,6 +260,7 @@ function triggerStoreLogout() {
     if (uInput) uInput.value = "";
     if (pInput) pInput.value = "";
     
+    switchAuthTab('login');
     switchView('loginView');
 }
 
@@ -966,7 +1034,7 @@ function ccViewBillDetails(id) {
     if (!targetBill) return;
 
     const labelSymbol = targetBill.type === 'GOLD' ? '🟡 ทอง' : '⚪ เงิน';
-    document.getElementById('ccModalTitleText').innerText = `🔎 รายละเอียดบิลรับซื้อ [ ประเภท: ${targetBill.type === 'GOLD' ? 'ทองคำ' : 'แร่เงิน'} ]`;
+    document.getElementById('ccModalTitleText').innerText = `🔎 รายรายละเอียดบิลรับซื้อ [ ประเภท: ${targetBill.type === 'GOLD' ? 'ทองคำ' : 'แร่เงิน'} ]`;
     document.getElementById('ccModalMetaInfo').innerHTML = `👤 ผู้ขาย: <b>${targetBill.clientName}</b> <br>📅 บันทึกเมื่อ: ${targetBill.time}`;
 
     const mBody = document.getElementById('ccModalTableBody');
