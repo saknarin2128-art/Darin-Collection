@@ -3,352 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darin Collection - Store Portal & Large Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>DCSG SYSTEM — Darin Collection</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=Niramit:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/style.css">
 
     <style>
+        :root {
+            --bg-cream: #fdfbf7;
+            --navy-dark: #0a142f;
+            --navy-light: #162447;
+            --gold-amber: #d4af37;
+            --gold-light: #f3e5ab;
+            --text-main: #2b2b2b;
+            --text-muted: #8c8c8c;
+            --card-bg: #ffffff;
+            --border-color: #f0e6d2;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Anuphan', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* Views Visibility Control */
+        .view-section {
+            display: none;
+            width: 100%;
+        }
+        .view-section.active {
+            display: block;
+        }
+
+        /* ---------------- VIEW 1: LOGIN ---------------- */
+        #loginView {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background: radial-gradient(circle at center, #ffffff 0%, #f7f2e8 100%);
+        }
+
+        .login-box {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 32px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(10, 20, 47, 0.08);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .brand-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(212, 175, 55, 0.15);
+            color: #b38e6d;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+
+        .login-title {
+            font-family: 'Niramit', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin: 0 0 6px 0;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--navy-dark);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #e2d9cc;
+            border-radius: 10px;
+            font-family: 'Anuphan', sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--gold-amber);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--navy-dark);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: var(--navy-light);
+        }
+
+        .login-error {
+            color: #e53935;
+            font-size: 13px;
+            margin-top: 14px;
+            min-height: 18px;
+        }
+
+        /* ---------------- VIEW 2: PORTAL ---------------- */
+        .portal-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-color);
+            background: #ffffff;
+        }
+
+        .portal-brand {
+            font-family: 'Niramit', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: var(--navy-dark);
+        }
+
+        .portal-user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-portal-logout {
+            background: #fff0f0;
+            color: #d32f2f;
+            border: 1px solid #ffcdd2;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .portal-hero {
+            max-width: 1100px;
+            margin: 40px auto 20px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .portal-hero h1 {
+            font-family: 'Niramit', sans-serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin: 0 0 10px 0;
+        }
+
+        .portal-hero p {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 30px auto 50px auto;
+            padding: 0 20px;
+        }
+
+        .portal-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .portal-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(10, 20, 47, 0.08);
+        }
+
+        .card-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.12);
+            color: var(--navy-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .portal-card h3 {
+            font-size: 20px;
+            margin: 0 0 8px 0;
+            color: var(--navy-dark);
+        }
+
+        .portal-card p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin: 0 0 24px 0;
+            line-height: 1.5;
+        }
+
+        .btn-card-launch {
+            background: var(--navy-dark);
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .btn-card-launch:hover {
+            background: var(--gold-amber);
+        }
+
+        /* Locked Card Styling */
+        .portal-card.locked {
+            filter: grayscale(0.8);
+            opacity: 0.7;
+            background: #fbf9f5;
+        }
+
+        .lock-overlay {
+            display: none;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #e0e0e0;
+            color: #616161;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .portal-card.locked .lock-overlay {
+            display: inline-block;
+        }
+
+        .portal-card.locked .btn-card-launch {
+            background: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+
+        /* ---------------- VIEW 3: GOLD CALCULATOR APP ---------------- */
+        #appContainer {
+            position: relative;
+        }
         
+        .btn-back-portal {
+            position: fixed;
+            top: 14px;
+            right: 180px;
+            z-index: 999;
+            background: var(--gold-amber);
+            color: #ffffff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
 <body>
 
-    <div class="auth-card" id="authPortal">
-        <div class="loading-overlay" id="authLoading">⏳ กำลังยืนยันตัวตนผ่านระบบคลาวด์...</div>
-        
-        <div id="authForms">
-            <h1 class="auth-title">DCSG SYSTEM</h1>
-            <p class="auth-subtitle">Darin Calculate Silver & Gold System</p>
+    <div id="loginView" class="view-section active">
+        <div class="login-box">
+            <span class="brand-badge">DARIN COLLECTION</span>
+            <h1 class="login-title">DCSG SYSTEM</h1>
+            <p class="login-subtitle">กรุณาเข้าสู่ระบบเพื่อใช้งานเครื่องมือสาขา</p>
             
-            <div class="tab-menu">
-                <button class="tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">ลงชื่อเข้าใช้งาน</button>
-                <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')">ลงทะเบียนร้านค้าใหม่</button>
+            <div class="form-group">
+                <label>ชื่อผู้ใช้งาน (Username)</label>
+                <input type="text" id="inputUsername" class="form-control" placeholder="ระบุ Username" autocomplete="off">
             </div>
-
-            <form id="loginForm" onsubmit="event.preventDefault(); triggerLiveStoreLogin();">
-                <div class="form-group">
-                    <label>Username (ชื่อผู้ใช้ประจำสาขา)</label>
-                    <input type="text" id="loginUser" placeholder="ระบุ Username" required>
-                </div>
-                <div class="form-group">
-                    <label>รหัสผ่าน (Password)</label>
-                    <input type="password" id="loginPass" placeholder="ระบุรหัสผ่าน" required>
-                </div>
-                <button type="submit" class="btn-auth">🔐 ตรวจสอบสิทธิ์เครื่องและล็อกอิน</button>
-            </form>
-
-            <form id="registerForm" style="display: none;" onsubmit="event.preventDefault(); triggerLiveStoreSignup();">
-                <div class="form-group">
-                    <label>1. ชื่อแบรนด์ร้านค้าหลัก (ภาษาอังกฤษตัวพิมพ์เล็ก)</label>
-                    <input type="text" id="regShop" placeholder="เช่น banpong1" required>
-                </div>
-                <div class="form-group">
-                    <label>2. ชื่อร้านและสาขาที่จะแสดงผลหน้าเว็บ</label>
-                    <input type="text" id="regDisplay" placeholder="เช่น บ้านโป่ง1" required>
-                </div>
-                <div class="form-group">
-                    <label>3. ตั้งชื่อ Username ประจำเครื่องนี้</label>
-                    <input type="text" id="regUser" placeholder="เช่น banpong1_owner" required>
-                </div>
-                <div class="form-group">
-                    <label>4. ตั้งรหัสผ่าน (Password)</label>
-                    <input type="password" id="regPass" placeholder="กำหนดรหัสผ่านประจำไอดี" required>
-                </div>
-                <div class="form-group">
-                    <label>5. บทบาทโครงสร้างการใช้งาน</label>
-                    <select id="regRole">
-                        <option value="Owner">Owner (เจ้าของร้าน/ผู้คุมเครือข่าย)</option>
-                        <option value="Staff">Staff (พนักงานประจำสาขาหน้าร้าน)</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-auth" style="background-color:#3d6a45;">📝 ส่งใบสมัครเข้าคิวอนุมัติจากบอส</button>
-            </form>
-        </div>
-
-        <div class="success-view" id="successView">
-            <div style="font-size: 54px; margin-bottom: 15px;">✨</div>
-            <h3 style="margin: 0 0 10px 0; color:#3d6a45;">ส่งใบสมัครขึ้นระบบจริงเรียบร้อย!</h3>
-            <p style="font-size:13.5px; color:#8c7b70; line-height:1.6; margin-bottom:20px;">
-                ข้อมูลขยายเครือข่ายสาขาของท่านถูกบันทึกลงสเปรดชีตแล้ว<br>
-                กรุณาแจ้ง <b>"บอสใหญ่"</b> ให้เปิดหน้าแอดมินเพื่ออนุมัติสิทธิ์ล็อกอินครับ
-            </p>
-            <button class="btn-auth" style="background:#4a3b32;" onclick="backToLoginView()">ย้อนกลับหน้าเข้าสู่ระบบ</button>
+            
+            <div class="form-group">
+                <label>รหัสผ่าน (Password)</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="ระบุ Password" onkeydown="if(event.key==='Enter') triggerAppLogin()">
+            </div>
+            
+            <button class="btn-submit" onclick="triggerAppLogin()">🔒 เข้าสู่ระบบ</button>
+            <div class="login-error" id="loginErrorMsg"></div>
         </div>
     </div>
 
-    <div class="main-dashboard" id="mainDashboard">
-        <div class="dash-header">
-            <div>
-                <h1 id="displayShopTitle">กำลังดึงตราแบรนด์ร้านค้า...</h1>
-                <div style="font-size: 13px; color: #a39284; margin-top: 4px;">ระบบเทคโนโลยีคำนวณราคามวลรวมและวิเคราะห์สถิติจริงหลังบ้าน</div>
-            </div>
-            <div class="user-badge-zone">
-                <div class="user-tag" style="display:flex; align-items:center; gap:6px; padding:4px 10px 4px 14px;">
-                    📍
-                    <select id="calcBranchSelector" onchange="onBranchSelectorChange()" style="border:none; background:transparent; font-family:'Anuphan'; font-weight:600; font-size:13px; color:#615043; outline:none; cursor:pointer;"></select>
-                </div>
-                <div class="user-tag" id="displayRoleTag" style="background:#4a3b32; color:#fff;">👤 สิทธิ์: Staff</div>
-                <button class="btn-logout" onclick="triggerStoreLogout()">🚪 ออกจากระบบ</button>
+    <div id="portalView" class="view-section">
+        <div class="portal-nav">
+            <div class="portal-brand">👑 DCSG SYSTEM</div>
+            <div class="portal-user-info">
+                <span id="portalUserDisplayName" style="font-weight:600; font-size:14px;">คุณนก ดาริน</span>
+                <button class="btn-portal-logout" onclick="triggerAppLogout()">🚪 ออกจากระบบ</button>
             </div>
         </div>
 
-        <div class="tabs-nav">
-            <button class="tab-nav-btn active" onclick="switchDashboardTab('calcTab', this)">🪙 เครื่องคำนวณราคา (เรทถอยสดจากบอส)</button>
-            <button class="tab-nav-btn" onclick="switchDashboardTab('reportTab', this)">📈 แดชบอร์ดสรุปยอดขายแยกประเภท</button>
-            <button class="tab-nav-btn" onclick="switchDashboardTab('classicCalcTab', this)">🧮 เครื่องคำนวณคลาสสิก (ทอง/เงินแยกก้อน)</button>
+        <div class="portal-hero">
+            <h1>DCSG SYSTEM</h1>
+            <p>ยินดีต้อนรับสู่ระบบบริหารจัดการร้านทองอัจฉริยะ กรุณาเลือกรายการที่ต้องการใช้งาน</p>
         </div>
 
-        <div id="calcTab" class="tab-content active">
-            <div class="workspace-grid">
+        <div class="portal-grid">
+            <div class="portal-card" id="cardValuation">
+                <span class="lock-overlay"><i class="fa-solid fa-lock"></i> ล็อกสิทธิ์</span>
                 <div>
-                    <form id="goldForm" onsubmit="event.preventDefault();">
-                        <div class="form-grid">
-                            <div class="form-group" style="grid-column: span 2;"><label id="basePriceLabel">ราคาทองอ้างอิงสำหรับคำนวณ (สามารถคีย์ตั้งค่าได้เองอิสระ)</label><input type="number" id="basePrice" value="44500" oninput="calculatePriceLogic()"></div>
-                            <div class="form-group"><label>ประเภทสินค้าหลัก</label><select id="goldType" onchange="onCategoryTypeChange('gold')"><option value="ทองคำแท่ง">ทองคำแท่ง</option><option value="ทองรูปพรรณ">ทองรูปพรรณ</option><option value="ทองหลอม">ทองหลอม</option><option value="ไม่ใช่ทองคำ">-- คำนวณแร่เงิน --</option></select></div>
-                            <div class="form-group"><label>ประเภทแร่เงิน</label><select id="silverType" onchange="onCategoryTypeChange('silver')"><option value="ไม่ใช่แร่เงิน">-- คำนวณทองคำ --</option><option value="เงินแท่ง">เงินแท่ง (บาท)</option><option value="เงินหลอม">เงินหลอม</option></select></div>
-                            <div class="form-group"><label>น้ำหนักชิ้นงาน (กรัม)</label><input type="number" step="any" id="weightGrams" value="15.24" oninput="calculatePriceLogic()"><div class="preset-container"><button type="button" class="btn-preset" onclick="setWeightShortcut(1.905)">ครึ่งสลึง</button><button type="button" class="btn-preset" onclick="setWeightShortcut(3.811)">1 สลึง</button><button type="button" class="btn-preset" onclick="setWeightShortcut(15.24)">1 บาท</button></div></div>
-                            <div class="form-group full-width" id="meltedPurityGroup"><label id="purityLabel">เปอร์เซ็นต์ความบริสุทธิ์ (%)</label><input type="number" step="any" id="meltedPurity" value="96.5" oninput="calculatePriceLogic()"></div>
+                    <div class="card-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>ระบบประเมินราคา</h3>
+                    <p>ประเมินราคาชิ้นงาน วิเคราะห์ทุนและเปรียบเทียบมูลค่าแท้จริง</p>
+                </div>
+                <button class="btn-card-launch" onclick="launchValuation()">🚀 เปิดระบบประเมิน</button>
+            </div>
 
-                            <div class="form-group full-width"><label>ราคาคำนวณสุทธิต่อกรัมชิ้นนี้</label><input type="text" id="pricePerGram" readonly value="0.00 บาท"></div>
-                            <button type="button" class="btn-add-item full-width" onclick="pushItemToBill()">➕ บันทึกเข้าตั๋วบิลฝั่งขวา ➡️</button>
-                        </div>
-                    </form>
+            <div class="portal-card" id="cardPawn">
+                <span class="lock-overlay"><i class="fa-solid fa-lock"></i> ล็อกสิทธิ์</span>
+                <div>
+                    <div class="card-icon-wrapper"><i class="fa-solid fa-ring"></i></div>
+                    <h3>ระบบรับฝากจำนำ</h3>
+                    <p>จัดการตั๋วจำนำ คำนวณดอกเบี้ย และสรุปยอดวันไถ่ถอน</p>
                 </div>
-                <div class="right-panel">
-                    <label style="font-weight:600; font-size:14px; margin-bottom:12px; display:block; color:#b38e6d;">📋 ตั๋วรายการรับซื้อสะสมในบิลนี้</label>
-                    <div class="table-container"><table class="item-table"><thead><tr><th>รายการ</th><th>น้ำหนัก (ก.)</th><th>ทุนรวม</th><th>การกระทำ</th></tr></thead><tbody id="itemTableBody"><tr><td colspan="4" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr></tbody></table></div>
-                    <div class="result-box">ราคารับซื้อสุทธิรวมทั้งสิ้น<span id="totalResult">0.00 บาท</span></div>
-                    <div class="action-container">
-                        <button class="btn-action btn-copy" onclick="alert('คัดลอกยอดบิลรวมเรียบร้อยแล้ว')">📋 คัดลอก</button>
-                        <button class="btn-action btn-send-sheet" onclick="commitBillToCloudAndDashboard()">☁️ บันทึกเข้าชีทและแดชบอร์ด</button>
-                    </div>
-                    <div class="cheat-sheet-box" id="cheatSheetContent">กำลังตรวจสอบเรทถอยสดจากระบบแอดมิน...</div>
+                <button class="btn-card-launch" onclick="launchPawn()">🚀 เปิดระบบจำนำ</button>
+            </div>
+
+            <div class="portal-card" id="cardCalc">
+                <span class="lock-overlay"><i class="fa-solid fa-lock"></i> ล็อกสิทธิ์</span>
+                <div>
+                    <div class="card-icon-wrapper"><i class="fa-solid fa-calculator"></i></div>
+                    <h3>คำนวณราคาทองคำ</h3>
+                    <p>คิดราคาทองคำหน้าร้าน คำนวณมวลรวม และบันทึกตั๋วบิลรายวัน</p>
                 </div>
+                <button class="btn-card-launch" onclick="launchCalculator()">🚀 เปิดเครื่องคำนวณ</button>
             </div>
         </div>
 
-        <div id="reportTab" class="tab-content">
-            <div class="report-section">
-                <div class="filter-row">
-                    <h3 style="margin:0; color:#4a3b32; font-size:16px;">📊 ตารางแจกแจงบัญชีและการจัดการความเสี่ยงทองคำ</h3>
-                    
-                    <div class="filter-group">
-                        <label style="color:#b38e6d; font-weight:700;">👑 ราคาทองอ้างอิงสมาคม:</label>
-                        <input type="number" id="dashboardAssociationPrice" value="44500" style="width:110px; font-weight:700;" oninput="rebuildLargeDashboardTableHTML()">
+        <div class="trust-badges">
+            <span>🛡️ ระบบปลอดภัย Bank Grade</span>
+            <span>⚡ เชื่อมต่อฐานข้อมูล Real-time</span>
+        </div>
+    </div>
 
-                        <label style="color:#615043; font-weight:700;">🥈 ราคาเงินอ้างอิง (ต่อกรัม):</label>
-                        <input type="number" id="dashboardSilverPriceInput" value="70" style="width:90px; font-weight:700;" oninput="rebuildLargeDashboardTableHTML()">
-                    </div>
-
-                    <div class="filter-group">
-                        <label>🏠 สาขา:</label>
-                        <select id="dashboardBranchFilter" onchange="rebuildLargeDashboardTableHTML()">
-                            <option value="all">ทุกสาขา</option>
-                        </select>
-
-                        <label>📅 ช่วงเวลา:</label>
-                        <select id="dashboardDateFilter" onchange="rebuildLargeDashboardTableHTML()">
-                            <option value="all">แสดงข้อมูลทั้งหมด</option>
-                            <option value="today">เฉพาะวันนี้</option>
-                            <option value="month">เฉพาะเดือนนี้</option>
-                            <option value="year">เฉพาะปีนี้</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="dashboard-table-wrapper">
-                    <table class="dash-large-table">
-                        <thead>
-                            <tr>
-                                <th>วันที่</th>
-                                <th>สาขา</th>
-                                <th>รายการที่</th>
-                                <th>ชื่อรายการ</th>
-                                <th>น้ำหนัก (ก.)</th>
-                                <th>เปอร์เซ็นต์</th>
-                                <th>ทุน (บาท)</th>
-                                <th>ขั้นตอน</th>
-                                <th>ราคาทุน/บาททอง</th>
-                                <th>กำไร / ขาดทุน</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dashboardTableBody"></tbody>
-                    </table>
-                </div>
+    <div id="calculatorView" class="view-section">
+        <button class="btn-back-portal" onclick="returnToPortal()"><i class="fa-solid fa-house"></i> กลับหน้าหลัก</button>
+        
+        <div id="appContainer">
+            <div id="component-sidebar"></div>
+            <div class="app-main-content">
+                <div id="component-navbar"></div>
+                <div class="tab-content active" id="tab-calculator"></div>
+                <div class="tab-content" id="tab-dashboard"></div>
+                <div class="tab-content" id="tab-classic"></div>
             </div>
         </div>
-
-        <div id="classicCalcTab" class="tab-content">
-            <style>
-
-</style>
-
-<div class="classic-scope">
-<div class="main-wrapper">
-
-  <div class="left-container">
-    <div class="calculator-container">
-      <h2>ดาริน คอลเลคชั่น</h2>
-      <p class="subtitle" id="ccSubTitleText">ระบบคำนวณราคาทองคำอัตโนมัติ (คลาสสิก)</p>
-
-      <div class="calc-mode-container">
-        <button id="ccGoldModeBtn" class="mode-btn active-gold" onclick="ccSwitchMode('GOLD')">🟡 คำนวณทองคำ</button>
-        <button id="ccSilverModeBtn" class="mode-btn" onclick="ccSwitchMode('SILVER')">⚪ คำนวณแร่เงิน</button>
-      </div>
-
-      <form onsubmit="return false;">
-        <div class="cc-row">
-          <div class="cc-form-group">
-            <label id="ccLblRefPrice">1. ราคาอ้างอิงทอง (บาทละ)</label>
-            <input type="number" id="ccRefPrice" placeholder="เช่น 70000">
-          </div>
-          <div class="cc-form-group" id="ccExtraPriceFormGroup">
-            <label>4. ราคา + พิเศษ (บาท)</label>
-            <input type="number" id="ccExtraPrice" placeholder="เช่น 1800">
-          </div>
-        </div>
-
-        <div class="cc-row">
-          <div class="cc-form-group">
-            <label>3. น้ำหนัก (กรัม)</label>
-            <input type="number" step="0.001" id="ccWeight" placeholder="เช่น 15.24">
-          </div>
-          <div class="cc-form-group">
-            <label>2. เปอร์เซ็นต์ (%)</label>
-            <input type="number" step="0.01" id="ccPercent" placeholder="เช่น 90">
-          </div>
-        </div>
-
-        <div class="cc-form-group" style="margin-bottom:15px;">
-          <label>ราคาต่อกรัมสุทธิ (ระบบคำนวณอัตโนมัติ)</label>
-          <input type="text" id="ccPricePerGram" style="background:#fbf6f0; color:#a88463; font-weight:bold;" placeholder="รอดำเนินการคำนวณ..." readonly>
-        </div>
-
-        <div class="result-button">
-          <div style="font-size:14px; margin-bottom:5px; opacity:0.9;">ราคารับซื้อสุทธิ</div>
-          <div class="result-amount" id="ccTotalResult">0 บาท</div>
-        </div>
-
-        <button class="add-btn" onclick="ccAddRecordToTable()">➕ บันทึกลงตาราง</button>
-      </form>
     </div>
 
-    <div class="pure-gold-container">
-      <div class="pure-box-section">
-        <div class="pure-gold-title" id="ccLblPureGoldBox">✨ น้ำหนักทองเพียว 99.99% รวมทั้งหมด</div>
-        <div class="pure-gold-value" id="ccTotalPureGoldDisplay">0.000 กรัม</div>
-      </div>
-      <div class="pure-box-section" id="ccLeftRefineBoxSection">
-        <div class="pure-gold-title refine-title">💸 รวมค่าสกัดทั้งหมดที่ต้องจ่าย (คำนวณจากน้ำหนักรวม)</div>
-        <div class="pure-gold-value refine-value" id="ccTotalRefineDisplay">0 บาท</div>
-      </div>
-    </div>
-  </div>
+    <div id="component-modals"></div>
 
-  <div class="cc-table-container">
+    <script src="js/config.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/components/sidebar.js"></script>
+    <script src="js/components/navbar.js"></script>
+    <script src="js/components/modal.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/app.js"></script>
 
-    <div class="tab-control-bar">
-      <button id="ccTabCurrentBtn" class="cc-tab-btn active-tab" onclick="ccSwitchTab('CURRENT')">📋 หน้าปัจจุบัน (ตารางทำงาน)</button>
-      <button id="ccTabHistoryBtn" class="cc-tab-btn" onclick="ccSwitchTab('HISTORY')">🕒 ประวัติบันทึกปิดยอด</button>
-    </div>
+    <script>
+        // ลิงก์ระบบประเมินราคาและระบบจำนำ (ใส่ URL ของบอสตรงนี้)
+        const URL_VALUATION = "https://darintrade-7vp8ee75.manus.space"; 
+        const URL_PAWN = "https://darintrade-7vp8ee75.manus.space"; 
 
-    <div id="ccPaneCurrent">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3 id="ccLblTableTitle">📋 รายการบันทึกการซื้อขาย (ทองคำ)</h3>
-        <div style="display:flex; gap:10px;">
-          <button class="save-to-history-btn" onclick="ccSaveCurrentToHistory()">💾 บันทึกปิดยอดลงประวัติ</button>
-          <button class="clear-btn" onclick="ccClearTable()">🗑️ ล้างตาราง</button>
-        </div>
-      </div>
+        let userPermissions = { val: "No", pawn: "No", calc: "No" };
 
-      <div class="table-scroll-wrapper">
-        <table class="gold-table">
-          <thead>
-            <tr>
-              <th style="text-align: left; padding-left: 20px;">1. รายการ</th>
-              <th>2. น้ำหนัก (กรัม)</th>
-              <th>3. เปอร์เซ็นต์ (%)</th>
-              <th id="ccThPricePerGram">4. ราคาต่อกรัม (บาท)</th>
-              <th id="ccThPureGold">5. ทองเพียว (กรัม)</th>
-              <th>6. จำนวนเงิน (ทศนิยม 3 ตำแหน่ง)</th>
-              <th>7. จำนวนจ่าย (ปัดขึ้น 1 บาท)</th>
-            </tr>
-          </thead>
-          <tbody id="ccTableBody"></tbody>
-          <tfoot>
-            <tr class="summary-row">
-              <td style="text-align: left; padding-left: 20px;">รวมทั้งหมด</td>
-              <td id="ccTotalWeightSum">0.000 กรัม</td>
-              <td id="ccAveragePercentSum">0.000%</td> 
-              <td id="ccAvgPricePerGramSum">0.0 บาท</td>
-              <td id="ccTotalPureGoldSum">0.000 กรัม</td>
-              <td id="ccTotalAmountSum">0.000 บาท</td> 
-              <td id="ccTotalPaymentSum" class="pay-column">0 บาท</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+        function getBrowserDeviceToken() {
+            let token = localStorage.getItem('dcsg_device_token');
+            if (!token) {
+                token = 'DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                localStorage.setItem('dcsg_device_token', token);
+            }
+            return token;
+        }
 
-      <div id="ccSilverNetPayBox" class="silver-net-pay-container hidden-element">
-        <div class="silver-net-title">💵 จำนวนจ่ายสุทธิของแร่เงิน (รวมจำนวนจ่าย - ค่าสกัดรวม)</div>
-        <div class="silver-net-value" id="ccSilverNetPayDisplay">0 บาท</div>
-      </div>
-    </div>
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
 
-    <div id="ccPaneHistory" class="hidden-element">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3>🕒 รายการประวัติปิดยอดที่บันทึกไว้</h3>
-        <button class="clear-btn" onclick="ccClearAllHistory()">🚨 ล้างประวัติทั้งหมด</button>
-      </div>
+        function triggerAppLogin() {
+            const user = document.getElementById('inputUsername').value.trim();
+            const pass = document.getElementById('inputPassword').value.trim();
+            const token = getBrowserDeviceToken();
+            const errorEl = document.getElementById('loginErrorMsg');
 
-      <div id="ccHistoryContainer" class="history-list"></div>
+            if (!user || !pass) {
+                errorEl.innerText = "⚠️ กรุณากรอก Username และ Password";
+                return;
+            }
 
-      <div class="history-grand-total">
-        <span>📊 ยอดจ่ายสะสมรวมของวันนี้:</span>
-        <span id="ccGrandTotalDisplay">ทองคำ: 0 บาท | แร่เงิน: 0 บาท</span>
-      </div>
-    </div>
+            errorEl.innerText = "⏳ กำลังตรวจสอบสิทธิ์...";
 
-  </div>
-</div>
+            fetch(`${CONFIG.CLOUD_URL}?action=loginCheck&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&token=${encodeURIComponent(token)}&_ts=${Date.now()}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        errorEl.innerText = "";
+                        // บันทึก Session
+                        sessionStorage.setItem('dcsg_session_user', user);
+                        sessionStorage.setItem('dcsg_session_pass', pass);
+                        sessionStorage.setItem('dcsg_session_data', JSON.stringify(data));
 
-<div id="ccDetailModal" class="modal-overlay hidden-element">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title" id="ccModalTitleText">🔎 รายละเอียดรายการย่อยในบิล</div>
-      <button class="modal-close-x" onclick="ccCloseModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px; font-size:14px; color:#555;" id="ccModalMetaInfo"></div>
-      <div class="table-scroll-wrapper" style="margin-top:0; max-height:350px;">
-        <table class="gold-table">
-          <thead>
-            <tr>
-              <th style="text-align:left; padding-left:15px;">รายการ</th>
-              <th>น้ำหนัก (กรัม)</th>
-              <th>เปอร์เซ็นต์ (%)</th>
-              <th>ราคาต่อกรัม</th>
-              <th>เพียว (กรัม)</th>
-              <th>จำนวนจ่าย</th>
-            </tr>
-          </thead>
-          <tbody id="ccModalTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-close-modal" onclick="ccCloseModal()">❌ ปิดหน้าต่างนี้</button>
-    </div>
-  </div>
-</div>
-</div>
+                        userPermissions = data.permissions || { val: "Yes", pawn: "Yes", calc: "Yes" };
+                        
+                        // แสดงชื่อผู้ใช้
+                        document.getElementById('portalUserDisplayName').innerText = `${data.displayName || user} (${data.shop || ''})`;
 
-        </div>
-    </div>
-           <script src="js/app.js"></script>
+                        // อัปเดตสถานะปุ่ม Portal
+                        applyPermissionsUI();
+
+                        // สลับไปหน้า Portal
+                        switchView('portalView');
+
+                        // โหลดข้อมูลในแอปคำนวณทองเตรียมไว้
+                        if (typeof initializeAppSession === 'function') {
+                            initializeAppSession(data, user, pass, token);
+                        }
+                    } else {
+                        errorEl.innerText = "❌ " + (data.message || "เข้าสู่ระบบไม่สำเร็จ");
+                    }
+                })
+                .catch(err => {
+                    console.error("Login error:", err);
+                    errorEl.innerText = "❌ ไม่สามารถติดต่อเซิร์ฟเวอร์ได้";
+                });
+        }
+
+        function applyPermissionsUI() {
+            // 1. Valuation
+            const cardVal = document.getElementById('cardValuation');
+            if (userPermissions.val === "Yes") cardVal.classList.remove('locked');
+            else cardVal.classList.add('locked');
+
+            // 2. Pawn
+            const cardPawn = document.getElementById('cardPawn');
+            if (userPermissions.pawn === "Yes") cardPawn.classList.remove('locked');
+            else cardPawn.classList.add('locked');
+
+            // 3. Calculator
+            const cardCalc = document.getElementById('cardCalc');
+            if (userPermissions.calc === "Yes") cardCalc.classList.remove('locked');
+            else cardCalc.classList.add('locked');
+        }
+
+        function launchValuation() {
+            if (userPermissions.val !== "Yes") {
+                alert("🚫 คุณไม่มีสิทธิ์เข้าใช้งานระบบประเมินราคา (โปรดติดต่อแอดมิน)");
+                return;
+            }
+            window.open(URL_VALUATION, '_blank');
+        }
+
+        function launchPawn() {
+            if (userPermissions.pawn !== "Yes") {
+                alert("🚫 คุณไม่มีสิทธิ์เข้าใช้งานระบบรับฝากจำนำ (โปรดติดต่อแอดมิน)");
+                return;
+            }
+            window.open(URL_PAWN, '_blank');
+        }
+
+        function launchCalculator() {
+            if (userPermissions.calc !== "Yes") {
+                alert("🚫 คุณไม่มีสิทธิ์เข้าใช้งานระบบคำนวณราคาทองคำ (โปรดติดต่อแอดมิน)");
+                return;
+            }
+            switchView('calculatorView');
+        }
+
+        function returnToPortal() {
+            switchView('portalView');
+        }
+
+        function triggerAppLogout() {
+            sessionStorage.clear();
+            document.getElementById('inputUsername').value = "";
+            document.getElementById('inputPassword').value = "";
+            document.getElementById('loginErrorMsg').innerText = "";
+            switchView('loginView');
+        }
+
+        // ตรวจสอบ Session เดิมตอนเปิดหน้าเว็บ
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = sessionStorage.getItem('dcsg_session_user');
+            const savedPass = sessionStorage.getItem('dcsg_session_pass');
+            if (savedUser && savedPass) {
+                document.getElementById('inputUsername').value = savedUser;
+                document.getElementById('inputPassword').value = savedPass;
+                triggerAppLogin();
+            }
+        });
+    </script>
 </body>
 </html>
