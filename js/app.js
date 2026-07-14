@@ -111,7 +111,6 @@ function triggerLiveStoreSignup() {
         .catch(err => {
             console.error("Register Error:", err);
             if (loadingEl) loadingEl.style.display = 'none';
-            // แสดงหน้าสำเร็จเพื่อป้องกันข้อผิดพลาดจากปัญหา CORS หากเซิร์ฟเวอร์บันทึกสำเร็จ
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('successView').style.display = 'block';
         });
@@ -984,7 +983,6 @@ function ccRenderHistoryList() {
                     👤 ผู้ขาย: <b>${item.clientName}</b> | น้ำหนักรวม: <b>${item.weightSum.toFixed(3)} กรัม</b> | ยอดจ่ายสุทธิ: <b style="color:#27ae60;">${Math.ceil(item.netSum).toLocaleString('th-TH')} บาท</b>
                 </div>
                 <div class="history-actions">
-                    <button class="hist-btn btn-view-detail" onclick="ccViewBillDetails(${item.id})">🔎 ดูรายละเอียด</button>
                     <button class="hist-btn btn-recall" onclick="ccRecallBillToTable(${item.id})">🔍 เรียกคืนข้อมูล</button>
                     <button class="hist-btn btn-delete-hist" onclick="ccDeleteHistoryItem(${item.id})">❌ ลบ</button>
                 </div>
@@ -1027,52 +1025,6 @@ function ccRecallBillToTable(id) {
         ccSwitchTab('CURRENT');
         alert("เรียกคืนข้อมูลลงตารางปัจจุบันสำเร็จแล้ว สามารถแก้ไขต่อได้ทันทีครับ");
     }
-}
-
-function ccViewBillDetails(id) {
-    const targetBill = ccSavedHistory.find(item => item.id === id);
-    if (!targetBill) return;
-
-    const labelSymbol = targetBill.type === 'GOLD' ? '🟡 ทอง' : '⚪ เงิน';
-    document.getElementById('ccModalTitleText').innerText = `🔎 รายรายละเอียดบิลรับซื้อ [ ประเภท: ${targetBill.type === 'GOLD' ? 'ทองคำ' : 'แร่เงิน'} ]`;
-    document.getElementById('ccModalMetaInfo').innerHTML = `👤 ผู้ขาย: <b>${targetBill.clientName}</b> <br>📅 บันทึกเมื่อ: ${targetBill.time}`;
-
-    const mBody = document.getElementById('ccModalTableBody');
-    mBody.innerHTML = "";
-
-    targetBill.details.forEach((record, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td style="text-align:left; padding-left:15px;">${labelSymbol}ก้อนที่ ${index+1}</td>
-            <td>${record.weight.toFixed(3)}</td>
-            <td>${record.percent}%</td>
-            <td>${ccFormatPricePerGram(record.pricePerGram)}</td>
-            <td>${record.pureGold.toFixed(3)}</td>
-            <td style="font-weight:bold; color:#b59275;">${record.finalPay.toLocaleString('th-TH')} บาท</td>
-        `;
-        mBody.appendChild(tr);
-    });
-
-    const modalTotalAmount = targetBill.details.reduce((sum, r) => sum + (r.rawAmount || 0), 0);
-    const modalAvgPricePerGram = targetBill.weightSum > 0 ? (modalTotalAmount / targetBill.weightSum) : 0;
-
-    const trSum = document.createElement('tr');
-    trSum.className = "summary-row";
-    trSum.innerHTML = `
-        <td style="text-align:left; padding-left:15px; font-weight:bold;">ยอดรวมบิล</td>
-        <td style="font-weight:bold;">${targetBill.weightSum.toFixed(3)} กรัม</td>
-        <td style="font-weight:bold;">-</td>
-        <td style="font-weight:bold;">${ccFormatPricePerGram(modalAvgPricePerGram)}</td>
-        <td style="font-weight:bold;">${targetBill.pureSum.toFixed(3)} กรัม</td>
-        <td style="font-weight:bold; color:#27ae60;">${Math.ceil(targetBill.netSum).toLocaleString('th-TH')} บาท</td>
-    `;
-    mBody.appendChild(trSum);
-
-    document.getElementById('ccDetailModal').classList.remove('hidden-element');
-}
-
-function ccCloseModal() {
-    document.getElementById('ccDetailModal').classList.add('hidden-element');
 }
 
 // Event Listeners Initialization
