@@ -1,9 +1,11 @@
 * { box-sizing: border-box; }
+        
         body {
             font-family: 'Anuphan', sans-serif;
             background: radial-gradient(circle at center, #fdfbfa 0%, #f3ede6 100%);
-            min-height: 100vh; margin: 0; padding: 20px;
-            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 0; /* แก้ไขไม่ให้ padding ดันจอ */
             -webkit-font-smoothing: antialiased;
         }
 
@@ -31,10 +33,17 @@
             position: relative;
         }
 
-        /* 👑 ภาพโลโก้ร้าน */
-        .auth-logo { height: 90px; width: auto; margin: 0 auto 15px auto; display: block; object-fit: contain; }
-        .nav-logo { height: 40px; width: auto; margin-right: 12px; object-fit: contain; }
-        .dash-logo { height: 60px; width: auto; object-fit: contain; }
+        .brand-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(212, 175, 55, 0.15);
+            color: #b38e6d;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
 
         /* 💎 STYLE 2 (Thick Mode): สีกรมท่าลึก ขอบเงินโครเมียม แบบหนาพิเศษ */
         .auth-title { 
