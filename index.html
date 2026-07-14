@@ -16,8 +16,7 @@
 
     <div id="loginView" class="view-section active">
         <div class="auth-card">
-            <img src="images/logo.jpg" alt="Darin Collection Logo" class="auth-logo">
-            
+            <span class="brand-badge">DARIN COLLECTION</span>
             <h1 class="auth-title">DCSG SYSTEM</h1>
             <p class="auth-subtitle">ระบบเทคโนโลยีคำนวณราคามวลรวมและจัดการสิทธิ์สาขา</p>
             
@@ -93,10 +92,7 @@
 
     <div id="portalView" class="view-section">
         <div class="portal-nav">
-            <div class="portal-brand" style="display:flex; align-items:center;">
-                <img src="images/logo.jpg" alt="Logo" class="nav-logo">
-                DCSG SYSTEM
-            </div>
+            <div class="portal-brand">👑 DCSG SYSTEM</div>
             
             <div class="portal-user-info">
                 <span id="portalUserDisplayName" style="font-weight:600; font-size:14px;">กำลังโหลดชื่อผู้ใช้...</span>
@@ -152,12 +148,9 @@
 
         <div class="main-dashboard" id="mainDashboard">
             <div class="dash-header">
-                <div style="display:flex; align-items:center; gap:16px;">
-                    <img src="images/logo.jpg" alt="Logo" class="dash-logo">
-                    <div>
-                        <h1 id="displayShopTitle">กำลังดึงตราแบรนด์ร้านค้า...</h1>
-                        <div style="font-size: 13px; color: #a39284; margin-top: 4px;">ระบบเทคโนโลยีคำนวณราคามวลรวมและวิเคราะห์สถิติจริงหลังบ้าน</div>
-                    </div>
+                <div>
+                    <h1 id="displayShopTitle">กำลังดึงตราแบรนด์ร้านค้า...</h1>
+                    <div style="font-size: 13px; color: #a39284; margin-top: 4px;">ระบบเทคโนโลยีคำนวณราคามวลรวมและวิเคราะห์สถิติจริงหลังบ้าน</div>
                 </div>
                 
                 <div class="user-badge-zone">
@@ -441,36 +434,37 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="ccDetailModal" class="classic-scope modal-overlay hidden-element">
-        <div class="modal-box">
-            <div class="modal-header">
-                <div class="modal-title" id="ccModalTitleText">🔎 รายละเอียดบิลรับซื้อ</div>
-                <button class="modal-close-x" onclick="ccCloseModal()">✕</button>
-            </div>
-            <div class="modal-body">
-                <div id="ccModalMetaInfo" style="margin-bottom:15px; font-size:14px; color:#555;"></div>
-                <div class="table-scroll-wrapper">
-                    <table class="gold-table">
-                        <thead>
-                            <tr>
-                                <th>รายการ</th>
-                                <th>น้ำหนัก (กรัม)</th>
-                                <th>เปอร์เซ็นต์</th>
-                                <th>ราคา/กรัม</th>
-                                <th>เนื้อเพียว (กรัม)</th>
-                                <th>ยอดจ่ายจริง</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ccModalTableBody"></tbody>
-                    </table>
+            <div id="ccDetailModal" class="classic-scope modal-overlay hidden-element">
+                <div class="modal-box">
+                    <div class="modal-header">
+                        <div class="modal-title" id="ccModalTitleText">🔎 รายละเอียดบิลรับซื้อ</div>
+                        <button class="modal-close-x" onclick="ccCloseModal()">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="ccModalMetaInfo" style="margin-bottom:15px; font-size:14px; color:#555;"></div>
+                        <div class="table-scroll-wrapper">
+                            <table class="gold-table">
+                                <thead>
+                                    <tr>
+                                        <th>รายการ</th>
+                                        <th>น้ำหนัก (กรัม)</th>
+                                        <th>เปอร์เซ็นต์</th>
+                                        <th>ราคา/กรัม</th>
+                                        <th>เนื้อเพียว (กรัม)</th>
+                                        <th>ยอดจ่ายจริง</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ccModalTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-close-modal" onclick="ccCloseModal()">ปิดหน้าต่าง</button>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-close-modal" onclick="ccCloseModal()">ปิดหน้าต่าง</button>
-            </div>
+
         </div>
     </div>
 
