@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DCSG SYSTEM — Darin Collection</title>
+    <title>Darin Collection</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +17,8 @@
     <div id="loginView" class="view-section active">
         <div class="auth-card">
             <span class="brand-badge">DARIN COLLECTION</span>
-            <h1 class="auth-title">DCSG SYSTEM</h1>
-            <p class="auth-subtitle">ระบบเทคโนโลยีคำนวณราคามวลรวมและจัดการสิทธิ์สาขา</p>
+            <h1 class="auth-title">DARIN SYSTEM</h1>
+            <p class="auth-subtitle">ระบบจัดการสินทรัพย์และทองคำ</p>
             
             <div class="tab-menu">
                 <button class="tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">🔑 เข้าสู่ระบบ</button>
@@ -76,7 +76,7 @@
                 <h3 style="color:#0a142f; margin:0 0 8px 0; font-family:'Niramit'; font-size:20px;">ส่งข้อมูลลงทะเบียนเรียบร้อยแล้ว</h3>
                 <p style="font-size:13px; color:#615043; line-height:1.5; margin-bottom:20px;">
                     ระบบได้ส่งข้อมูลของคุณเข้าสู่ฐานข้อมูลเรียบร้อยแล้ว<br>
-                    <span style="color:#b38e6d; font-weight:700;">กรุณาแจ้งแอดมินหรือบอสเพื่อกดอนุมัติสิทธิ์ (Approved)</span> ก่อนเริ่มใช้งานครับ
+                    <span style="color:#b38e6d; font-weight:700;">กรุณาแจ้งแอดมินเพื่อกดอนุมัติสิทธิ์ (Approved)</span> ก่อนเริ่มใช้งานครับ
                 </p>
                 <button class="btn-auth" onclick="backToLoginView()">🔙 กลับไปหน้าเข้าสู่ระบบ</button>
             </div>
@@ -102,7 +102,7 @@
 
         <div class="portal-hero">
             <h1>DCSG SYSTEM</h1>
-            <p>ยินดีต้อนรับสู่ระบบบริหารจัดการร้านทองอัจฉริยะ กรุณาเลือกรายการที่ต้องการใช้งาน</p>
+            <p>ยินดีต้อนรับสู่ระบบการจัดการสินทรัพย์และทองคำ กรุณาเลือกรายการที่ต้องการใช้งาน</p>
         </div>
 
         <div class="portal-grid">
@@ -123,7 +123,7 @@
                     <h3>ระบบขายฝาก</h3>
                     <p>จัดการตั๋วจำนำ คำนวณดอกเบี้ย และสรุปยอดวันไถ่ถอน</p>
                 </div>
-                <button class="btn-card-launch" onclick="launchPawn()">🚀 เปิดระบบจำนำ</button>
+                <button class="btn-card-launch" onclick="launchPawn()">🚀 เปิดระบบขายฝาก</button>
             </div>
 
             <div class="portal-card" id="cardCalc">
@@ -150,7 +150,7 @@
             <div class="dash-header">
                 <div>
                     <h1 id="displayShopTitle">กำลังดึงตราแบรนด์ร้านค้า...</h1>
-                    <div style="font-size: 13px; color: #a39284; margin-top: 4px;">ระบบเทคโนโลยีคำนวณราคามวลรวมและวิเคราะห์สถิติจริงหลังบ้าน</div>
+                    <div style="font-size: 13px; color: #a39284; margin-top: 4px;">ระบบการจัดการสินทรัพย์และทองคำ</div>
                 </div>
                 
                 <div class="user-badge-zone">
@@ -164,9 +164,9 @@
             </div>
 
             <div class="tabs-nav">
-                <button class="tab-nav-btn active" id="btnMainCalcTab" onclick="switchMainTab('calcTab', this)">🪙 เครื่องคำนวณราคา (เรทถอยสดจากบอส)</button>
+                <button class="tab-nav-btn active" id="btnMainCalcTab" onclick="switchMainTab('calcTab', this)">🪙 เครื่องคำนวณราคา</button>
                 <button class="tab-nav-btn" id="btnMainReportTab" onclick="switchMainTab('reportTab', this)">📊 แดชบอร์ดสรุปยอดขายแยกประเภท</button>
-                <button class="tab-nav-btn" id="btnMainClassicTab" onclick="switchMainTab('classicTab', this)">📑 เครื่องคำนวณคลาสสิก (ทอง/เงินแยกก้อน)</button>
+                <button class="tab-nav-btn" id="btnMainClassicTab" onclick="switchMainTab('classicTab', this)">📑 ระบบล็อกราคาทองคำและแร่เงิน)</button>
             </div>
 
             <div class="tab-content active" id="calcTab">
