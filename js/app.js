@@ -1,7 +1,7 @@
 // js/app.js — DCSG System Architecture & Full Engine
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbyRxwiLp4JYaWkl2oR1omTycfPm3WIsBBfDbw91Ycbdeqi9AC2KGd5Xg0IEO6z2LevM/exec";
 const URL_VALUATION = "https://darintrade-7vp8ee75.manus.space"; 
-const URL_PAWN = "https://darintrade-7vp8ee75.manus.space"; 
+const URL_PAWN = "https://app-tooltify.com/dashboard/overview"; 
 
 // System States
 let userPermissions = { val: "No", pawn: "No", calc: "No" };
