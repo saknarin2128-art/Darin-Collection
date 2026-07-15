@@ -166,7 +166,7 @@
             <div class="tabs-nav">
                 <button class="tab-nav-btn active" id="btnMainCalcTab" onclick="switchMainTab('calcTab', this)">🪙 เครื่องคำนวณราคา</button>
                 <button class="tab-nav-btn" id="btnMainReportTab" onclick="switchMainTab('reportTab', this)">📊 แดชบอร์ดสรุปยอดขายแยกประเภท</button>
-                <button class="tab-nav-btn" id="btnMainClassicTab" onclick="switchMainTab('classicTab', this)">📑 ระบบล็อกราคาทองคำและแร่เงิน)</button>
+                <button class="tab-nav-btn" id="btnMainClassicTab" onclick="switchMainTab('classicTab', this)">📑 ระบบล็อกราคาทองคำและแร่เงิน</button>
             </div>
 
             <div class="tab-content active" id="calcTab">
@@ -238,12 +238,14 @@
                                     <tr>
                                         <th>รายการ</th>
                                         <th>น้ำหนัก (ก.)</th>
+                                        <th>ราคา/กรัม</th>
                                         <th>ทุนรวม</th>
+                                        <th>จ่ายสุทธิ</th>
                                         <th>การกระทำ</th>
                                     </tr>
                                 </thead>
                                 <tbody id="itemTableBody">
-                                    <tr><td colspan="4" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr>
+                                    <tr><td colspan="6" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -253,9 +255,8 @@
                             <span id="totalResult">0.00 บาท</span>
                         </div>
 
-                        <div class="action-container">
-                            <button type="button" class="btn-action btn-copy" onclick="alert('คัดลอกรายการสำรองเรียบร้อย')">📋 คัดลอก</button>
-                            <button type="button" class="btn-action btn-send-sheet" onclick="commitBillToCloudAndDashboard()">☁️ บันทึกเข้าชีทและแดชบอร์ด</button>
+                        <div class="action-container" style="display:flex; justify-content:flex-end;">
+                            <button type="button" class="btn-action btn-send-sheet" style="width: 100%;" onclick="commitBillToCloudAndDashboard()">☁️ บันทึกเข้าชีทและแดชบอร์ด</button>
                         </div>
                     </div>
                 </div>
