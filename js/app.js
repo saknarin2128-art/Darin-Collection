@@ -489,10 +489,20 @@ function pushItemToBill() {
     batchBillItems.push({ 
         type: typeLabel, 
         weight: weight, 
+        pricePerGram: pricePerGram,
         cost: itemTotalPay, 
+        netCost: itemTotalPay,
         purity: purityText,
-        status: currentStatus
+        status: currentStatus,
+        isRounded: false
     }); 
+    updateBillTableRender();
+}
+
+function roundItemUp(index) {
+    let originalCost = batchBillItems[index].cost;
+    batchBillItems[index].netCost = Math.ceil(originalCost / 10) * 10;
+    batchBillItems[index].isRounded = true;
     updateBillTableRender();
 }
 
@@ -502,7 +512,7 @@ function updateBillTableRender() {
     if (!tbody) return;
 
     if (batchBillItems.length === 0) { 
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr>`; 
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#a39284; padding:30px;">ไม่มีชิ้นงานในบิล</td></tr>`; 
         if (totalRes) totalRes.innerText = "0.00 บาท"; 
         return; 
     }
@@ -510,13 +520,26 @@ function updateBillTableRender() {
     tbody.innerHTML = ""; 
     let grandTotal = 0; 
     batchBillItems.forEach((item, index) => { 
-        grandTotal += item.cost; 
+        grandTotal += item.netCost; 
+        
+        let roundBtnHtml = !item.isRounded
+            ? `<button class="btn-delete-row" style="background:#e3f2fd; color:#0d47a1; border-color:#90caf9; margin-right:4px;" onclick="roundItemUp(${index})">🪄 ปัดขึ้น</button>`
+            : `<span style="font-size:11px; color:#2e7d32; font-weight:700; margin-right:4px;">✅ ปัดแล้ว</span>`;
+            
+        let costStyle = item.isRounded ? 'text-decoration: line-through; color: #a39284;' : 'color: #615043;';
+        let netCostStyle = item.isRounded ? 'color: #2e7d32; font-weight: 700;' : 'color: #4a3b32; font-weight: 700;';
+
         const row = document.createElement('tr'); 
         row.innerHTML = `
             <td><b>${item.type}</b></td>
             <td>${item.weight.toFixed(2)}</td>
-            <td><b>${item.cost.toLocaleString('th-TH')}.-</b></td>
-            <td><button class="btn-delete-row" onclick="removeSingleItemRow(${index})">❌ ลบ</button></td>
+            <td>${item.pricePerGram.toLocaleString('th-TH', {minimumFractionDigits:2})}</td>
+            <td><span style="${costStyle}">${item.cost.toLocaleString('th-TH', {minimumFractionDigits:2})}</span></td>
+            <td style="${netCostStyle}">${item.netCost.toLocaleString('th-TH')}.-</td>
+            <td style="display:flex; gap:6px; align-items:center;">
+                ${roundBtnHtml}
+                <button class="btn-delete-row" onclick="removeSingleItemRow(${index})">❌ ลบ</button>
+            </td>
         `; 
         tbody.appendChild(row); 
     });
@@ -544,7 +567,7 @@ function commitBillToCloudAndDashboard() {
             branch: currentBranchName || "สาขา 1",
             type: item.type,
             weight: item.weight,
-            amount: item.cost,
+            amount: item.netCost,
             purity: item.purity,
             status: item.status
         });
@@ -653,7 +676,6 @@ function rebuildLargeDashboardTableHTML() {
             profitBadgeHtml = `<span class="profit-negative">-${Math.abs(netProfitOrLoss).toLocaleString('th-TH', {minimumFractionDigits:0, maximumFractionDigits:0})}</span>`;
         }
 
-        // 🛠️ ส่วนที่แก้ไข: จัดการ 3 สถานะ (รอขาย, ล็อกราคา, ขายแล้ว)
         const isLocked = item.status === 'ล็อกราคา';
         const isSold = item.status === 'ขายแล้ว';
         
