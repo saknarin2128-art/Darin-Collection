@@ -1,7 +1,7 @@
 // js/app.js — DCSG System Architecture & Full Engine
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbyRxwiLp4JYaWkl2oR1omTycfPm3WIsBBfDbw91Ycbdeqi9AC2KGd5Xg0IEO6z2LevM/exec";
 const URL_VALUATION = "https://darintrade-7vp8ee75.manus.space"; 
-const URL_PAWN = "https://app-tooltify.com/sign-in"; 
+const URL_PAWN = "https://darintrade-7vp8ee75.manus.space"; 
 
 // System States
 let userPermissions = { val: "No", pawn: "No", calc: "No" };
@@ -653,14 +653,29 @@ function rebuildLargeDashboardTableHTML() {
             profitBadgeHtml = `<span class="profit-negative">-${Math.abs(netProfitOrLoss).toLocaleString('th-TH', {minimumFractionDigits:0, maximumFractionDigits:0})}</span>`;
         }
 
+        // 🛠️ ส่วนที่แก้ไข: จัดการ 3 สถานะ (รอขาย, ล็อกราคา, ขายแล้ว)
         const isLocked = item.status === 'ล็อกราคา';
+        const isSold = item.status === 'ขายแล้ว';
+        
+        let badgeClass = 'badge-wait';
+        let extraStyle = '';
+        
+        if (isLocked) {
+            badgeClass = 'badge-lock';
+        } else if (isSold) {
+            badgeClass = '';
+            extraStyle = 'background-color: #e8f5e9; color: #2e7d32;'; // สีเขียว ขายแล้ว
+        }
+
         const statusSelectHtml = `
-            <select class="status-badge ${isLocked ? 'badge-lock' : 'badge-wait'}"
-                    style="border:none; font-weight:600; cursor:pointer;"
+            <select class="status-badge ${badgeClass}"
+                    style="border:none; font-weight:600; cursor:pointer; ${extraStyle}"
                     onchange="updateItemStatus(${item.rowIndex}, this.value, this)">
-                <option value="รอขาย" ${!isLocked ? 'selected' : ''}>⏳ รอขาย</option>
+                <option value="รอขาย" ${!isLocked && !isSold ? 'selected' : ''}>⏳ รอขาย</option>
                 <option value="ล็อกราคา" ${isLocked ? 'selected' : ''}>🔒 ล็อกราคา</option>
+                <option value="ขายแล้ว" ${isSold ? 'selected' : ''}>✅ ขายแล้ว</option>
             </select>`;
+
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${item.date}</td>
